@@ -1,0 +1,533 @@
+Using device: cuda
+Classes: ['healthy', 'leaf_blight', 'leaf_curl', 'septoria_leaf_spot', 'verticulium_wilt']
+Train dataset size: 21723
+Validation dataset size: 5445
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:286: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()
+
+Epoch 1/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 1.5721
+Batch 100/453, Loss: 0.8427
+Batch 200/453, Loss: 0.7438
+Batch 300/453, Loss: 0.6662
+Batch 400/453, Loss: 0.6796
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.7648, Train Acc: 69.83%
+Val Loss: 0.3978, Val Acc: 86.10%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 86.10%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       0.94      0.99      0.97       500
+       leaf_blight       0.79      0.89      0.84      1309
+         leaf_curl       0.86      0.73      0.79       532
+septoria_leaf_spot       0.90      0.89      0.89      2340
+  verticulium_wilt       0.82      0.73      0.77       764
+
+          accuracy                           0.86      5445
+         macro avg       0.86      0.85      0.85      5445
+      weighted avg       0.86      0.86      0.86      5445
+
+
+Epoch 2/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.2880
+Batch 100/453, Loss: 0.3472
+Batch 200/453, Loss: 0.4240
+Batch 300/453, Loss: 0.5219
+Batch 400/453, Loss: 0.4077
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.3301, Train Acc: 87.87%
+Val Loss: 0.1860, Val Acc: 94.58%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 94.58%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       0.97      1.00      0.98       500
+       leaf_blight       0.95      0.93      0.94      1309
+         leaf_curl       0.89      0.91      0.90       532
+septoria_leaf_spot       0.96      0.96      0.96      2340
+  verticulium_wilt       0.94      0.93      0.93       764
+
+          accuracy                           0.95      5445
+         macro avg       0.94      0.95      0.94      5445
+      weighted avg       0.95      0.95      0.95      5445
+
+
+Epoch 3/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.1366
+Batch 100/453, Loss: 0.1269
+Batch 200/453, Loss: 0.2996
+Batch 300/453, Loss: 0.1421
+Batch 400/453, Loss: 0.1460
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.1635, Train Acc: 94.25%
+Val Loss: 0.1589, Val Acc: 95.52%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 95.52%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       0.99      0.99      0.99       500
+       leaf_blight       0.94      0.95      0.95      1309
+         leaf_curl       0.93      0.95      0.94       532
+septoria_leaf_spot       0.96      0.96      0.96      2340
+  verticulium_wilt       0.95      0.92      0.93       764
+
+          accuracy                           0.96      5445
+         macro avg       0.96      0.95      0.95      5445
+      weighted avg       0.96      0.96      0.96      5445
+
+
+Epoch 4/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.2450
+Batch 100/453, Loss: 0.0177
+Batch 200/453, Loss: 0.0254
+Batch 300/453, Loss: 0.0688
+Batch 400/453, Loss: 0.0600
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.1014, Train Acc: 96.51%
+Val Loss: 0.1424, Val Acc: 95.59%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 95.59%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       0.98      1.00      0.99       500
+       leaf_blight       0.96      0.95      0.96      1309
+         leaf_curl       0.92      0.93      0.92       532
+septoria_leaf_spot       0.97      0.96      0.96      2340
+  verticulium_wilt       0.92      0.94      0.93       764
+
+          accuracy                           0.96      5445
+         macro avg       0.95      0.96      0.95      5445
+      weighted avg       0.96      0.96      0.96      5445
+
+
+Epoch 5/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.1106
+Batch 100/453, Loss: 0.0495
+Batch 200/453, Loss: 0.0713
+Batch 300/453, Loss: 0.0453
+Batch 400/453, Loss: 0.2057
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0820, Train Acc: 97.19%
+Val Loss: 0.1595, Val Acc: 96.03%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 96.03%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       0.99      0.99      0.99       500
+       leaf_blight       0.95      0.95      0.95      1309
+         leaf_curl       0.96      0.93      0.95       532
+septoria_leaf_spot       0.96      0.97      0.97      2340
+  verticulium_wilt       0.94      0.95      0.95       764
+
+          accuracy                           0.96      5445
+         macro avg       0.96      0.96      0.96      5445
+      weighted avg       0.96      0.96      0.96      5445
+
+
+Epoch 6/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.0233
+Batch 100/453, Loss: 0.0417
+Batch 200/453, Loss: 0.0175
+Batch 300/453, Loss: 0.0181
+Batch 400/453, Loss: 0.0338
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0626, Train Acc: 97.85%
+Val Loss: 0.1626, Val Acc: 96.11%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 96.11%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       0.99      0.99      0.99       500
+       leaf_blight       0.96      0.95      0.95      1309
+         leaf_curl       0.95      0.94      0.95       532
+septoria_leaf_spot       0.96      0.98      0.97      2340
+  verticulium_wilt       0.97      0.92      0.95       764
+
+          accuracy                           0.96      5445
+         macro avg       0.97      0.96      0.96      5445
+      weighted avg       0.96      0.96      0.96      5445
+
+
+Epoch 7/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.0108
+Batch 100/453, Loss: 0.0236
+Batch 200/453, Loss: 0.0635
+Batch 300/453, Loss: 0.0279
+Batch 400/453, Loss: 0.0169
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0584, Train Acc: 97.90%
+Val Loss: 0.1634, Val Acc: 95.96%
+
+Epoch 8/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0161
+Batch 100/453, Loss: 0.0054
+Batch 200/453, Loss: 0.0081
+Batch 300/453, Loss: 0.0089
+Batch 400/453, Loss: 0.0119
+Train Loss: 0.0546, Train Acc: 98.14%
+Val Loss: 0.1636, Val Acc: 95.78%
+
+Epoch 9/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0749
+Batch 100/453, Loss: 0.0073
+Batch 200/453, Loss: 0.0058
+Batch 300/453, Loss: 0.0737
+Batch 400/453, Loss: 0.1578
+Train Loss: 0.0426, Train Acc: 98.59%
+Val Loss: 0.2808, Val Acc: 95.50%
+
+Epoch 10/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.1016
+Batch 100/453, Loss: 0.0467
+Batch 200/453, Loss: 0.0245
+Batch 300/453, Loss: 0.0180
+Batch 400/453, Loss: 0.0638
+Train Loss: 0.0413, Train Acc: 98.55%
+Val Loss: 0.2004, Val Acc: 96.49%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 96.49%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       0.99      0.99      0.99       500
+       leaf_blight       0.97      0.95      0.96      1309
+         leaf_curl       0.95      0.94      0.95       532
+septoria_leaf_spot       0.97      0.97      0.97      2340
+  verticulium_wilt       0.94      0.96      0.95       764
+
+          accuracy                           0.96      5445
+         macro avg       0.96      0.96      0.96      5445
+      weighted avg       0.96      0.96      0.96      5445
+
+
+Epoch 11/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.0515
+Batch 100/453, Loss: 0.0114
+Batch 200/453, Loss: 0.0008
+Batch 300/453, Loss: 0.0488
+Batch 400/453, Loss: 0.0008
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0205, Train Acc: 99.33%
+Val Loss: 0.1691, Val Acc: 96.86%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 96.86%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       1.00      1.00      1.00       500
+       leaf_blight       0.96      0.96      0.96      1309
+         leaf_curl       0.95      0.95      0.95       532
+septoria_leaf_spot       0.97      0.97      0.97      2340
+  verticulium_wilt       0.96      0.95      0.96       764
+
+          accuracy                           0.97      5445
+         macro avg       0.97      0.97      0.97      5445
+      weighted avg       0.97      0.97      0.97      5445
+
+
+Epoch 12/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.0279
+Batch 100/453, Loss: 0.0032
+Batch 200/453, Loss: 0.0119
+Batch 300/453, Loss: 0.0049
+Batch 400/453, Loss: 0.0003
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0121, Train Acc: 99.61%
+Val Loss: 0.1533, Val Acc: 96.97%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 96.97%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       1.00      1.00      1.00       500
+       leaf_blight       0.97      0.96      0.97      1309
+         leaf_curl       0.96      0.96      0.96       532
+septoria_leaf_spot       0.98      0.97      0.97      2340
+  verticulium_wilt       0.94      0.96      0.95       764
+
+          accuracy                           0.97      5445
+         macro avg       0.97      0.97      0.97      5445
+      weighted avg       0.97      0.97      0.97      5445
+
+
+Epoch 13/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.0005
+Batch 100/453, Loss: 0.0024
+Batch 200/453, Loss: 0.0221
+Batch 300/453, Loss: 0.0064
+Batch 400/453, Loss: 0.0286
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0088, Train Acc: 99.70%
+Val Loss: 0.1585, Val Acc: 96.90%
+
+Epoch 14/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0416
+Batch 100/453, Loss: 0.0010
+Batch 200/453, Loss: 0.0004
+Batch 300/453, Loss: 0.0286
+Batch 400/453, Loss: 0.0015
+Train Loss: 0.0075, Train Acc: 99.77%
+Val Loss: 0.1863, Val Acc: 96.90%
+
+Epoch 15/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0006
+Batch 100/453, Loss: 0.0002
+Batch 200/453, Loss: 0.0008
+Batch 300/453, Loss: 0.0018
+Batch 400/453, Loss: 0.0042
+Train Loss: 0.0116, Train Acc: 99.61%
+Val Loss: 0.1816, Val Acc: 96.60%
+
+Epoch 16/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0029
+Batch 100/453, Loss: 0.0375
+Batch 200/453, Loss: 0.0070
+Batch 300/453, Loss: 0.0181
+Batch 400/453, Loss: 0.0493
+Train Loss: 0.0142, Train Acc: 99.63%
+Val Loss: 0.1577, Val Acc: 96.79%
+
+Epoch 17/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0005
+Batch 100/453, Loss: 0.0008
+Batch 200/453, Loss: 0.0005
+Batch 300/453, Loss: 0.0003
+Batch 400/453, Loss: 0.0044
+Train Loss: 0.0093, Train Acc: 99.75%
+Val Loss: 0.1406, Val Acc: 97.19%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 97.19%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       1.00      1.00      1.00       500
+       leaf_blight       0.97      0.97      0.97      1309
+         leaf_curl       0.96      0.95      0.96       532
+septoria_leaf_spot       0.97      0.98      0.98      2340
+  verticulium_wilt       0.96      0.95      0.96       764
+
+          accuracy                           0.97      5445
+         macro avg       0.97      0.97      0.97      5445
+      weighted avg       0.97      0.97      0.97      5445
+
+
+Epoch 18/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.0013
+Batch 100/453, Loss: 0.0001
+Batch 200/453, Loss: 0.0066
+Batch 300/453, Loss: 0.0026
+Batch 400/453, Loss: 0.0004
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0053, Train Acc: 99.85%
+Val Loss: 0.1606, Val Acc: 97.17%
+
+Epoch 19/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0003
+Batch 100/453, Loss: 0.0012
+Batch 200/453, Loss: 0.0004
+Batch 300/453, Loss: 0.0002
+Batch 400/453, Loss: 0.0015
+Train Loss: 0.0028, Train Acc: 99.92%
+Val Loss: 0.1548, Val Acc: 97.12%
+
+Epoch 20/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0001
+Batch 100/453, Loss: 0.0966
+Batch 200/453, Loss: 0.0001
+Batch 300/453, Loss: 0.0034
+Batch 400/453, Loss: 0.0005
+Train Loss: 0.0028, Train Acc: 99.91%
+Val Loss: 0.1535, Val Acc: 97.26%
+Model saved as ONNX: models/best_tomato_model.onnx
+
+Best validation accuracy: 97.26%
+Classification Report:
+                    precision    recall  f1-score   support
+
+           healthy       1.00      1.00      1.00       500
+       leaf_blight       0.96      0.97      0.97      1309
+         leaf_curl       0.97      0.95      0.96       532
+septoria_leaf_spot       0.98      0.98      0.98      2340
+  verticulium_wilt       0.96      0.95      0.96       764
+
+          accuracy                           0.97      5445
+         macro avg       0.97      0.97      0.97      5445
+      weighted avg       0.97      0.97      0.97      5445
+
+
+Epoch 21/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/453, Loss: 0.0008
+Batch 100/453, Loss: 0.0227
+Batch 200/453, Loss: 0.0000
+Batch 300/453, Loss: 0.0002
+Batch 400/453, Loss: 0.0066
+/root/Crop-Classifier/Crop-Classifier/train_tomato.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0031, Train Acc: 99.89%
+Val Loss: 0.1654, Val Acc: 97.19%
+
+Epoch 22/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0001
+Batch 100/453, Loss: 0.0002
+Batch 200/453, Loss: 0.0095
+Batch 300/453, Loss: 0.0065
+Batch 400/453, Loss: 0.0230
+Train Loss: 0.0042, Train Acc: 99.88%
+Val Loss: 0.1586, Val Acc: 97.06%
+
+Epoch 23/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0018
+Batch 100/453, Loss: 0.0004
+Batch 200/453, Loss: 0.0005
+Batch 300/453, Loss: 0.0020
+Batch 400/453, Loss: 0.0009
+Train Loss: 0.0043, Train Acc: 99.84%
+Val Loss: 0.1644, Val Acc: 96.95%
+
+Epoch 24/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0017
+Batch 100/453, Loss: 0.0004
+Batch 200/453, Loss: 0.0008
+Batch 300/453, Loss: 0.0002
+Batch 400/453, Loss: 0.0300
+Train Loss: 0.0027, Train Acc: 99.91%
+Val Loss: 0.1659, Val Acc: 96.95%
+
+Epoch 25/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0000
+Batch 100/453, Loss: 0.0000
+Batch 200/453, Loss: 0.0040
+Batch 300/453, Loss: 0.0004
+Batch 400/453, Loss: 0.0001
+Train Loss: 0.0018, Train Acc: 99.93%
+Val Loss: 0.1722, Val Acc: 97.13%
+
+Epoch 26/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0002
+Batch 100/453, Loss: 0.0001
+Batch 200/453, Loss: 0.0002
+Batch 300/453, Loss: 0.0001
+Batch 400/453, Loss: 0.0004
+Train Loss: 0.0025, Train Acc: 99.93%
+Val Loss: 0.1680, Val Acc: 97.08%
+
+Epoch 27/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0005
+Batch 100/453, Loss: 0.0006
+Batch 200/453, Loss: 0.0000
+Batch 300/453, Loss: 0.0003
+Batch 400/453, Loss: 0.0002
+Train Loss: 0.0020, Train Acc: 99.95%
+Val Loss: 0.1647, Val Acc: 97.15%
+
+Epoch 28/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0000
+Batch 100/453, Loss: 0.0000
+Batch 200/453, Loss: 0.0059
+Batch 300/453, Loss: 0.0007
+Batch 400/453, Loss: 0.0001
+Train Loss: 0.0015, Train Acc: 99.94%
+Val Loss: 0.1900, Val Acc: 97.02%
+
+Epoch 29/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0001
+Batch 100/453, Loss: 0.0000
+Batch 200/453, Loss: 0.0001
+Batch 300/453, Loss: 0.0003
+Batch 400/453, Loss: 0.0005
+Train Loss: 0.0016, Train Acc: 99.96%
+Val Loss: 0.1678, Val Acc: 97.15%
+
+Epoch 30/50
+--------------------------------------------------
+Batch 0/453, Loss: 0.0007
+Batch 100/453, Loss: 0.0000
+Batch 200/453, Loss: 0.0002
+Batch 300/453, Loss: 0.0001
+Batch 400/453, Loss: 0.0003
+Train Loss: 0.0011, Train Acc: 99.97%
+Val Loss: 0.1784, Val Acc: 96.97%
+Early stopping triggered after 10 epochs without improvement
+
+Training completed! Best validation accuracy: 97.26%

@@ -1,0 +1,77 @@
+_wandb:
+    value:
+        cli_version: 0.21.0
+        e:
+            n6hbum2og31k341xxekm1y66og1urwg9:
+                codePath: train_cashew.py
+                codePathLocal: train_cashew.py
+                cpu_count: 8
+                cpu_count_logical: 8
+                cudaVersion: "12.9"
+                disk:
+                    /:
+                        total: "520120602624"
+                        used: "52132073472"
+                email: dugboryeleprince@gmail.com
+                executable: /root/miniconda3/envs/classifier/bin/python
+                git:
+                    commit: 95c01a6a44c24fead9bdab0a3a4b97b69f5fc2d0
+                    remote: https://github.com/pryyyynz/Crop-Classifier.git
+                gpu: NVIDIA RTX 6000 Ada Generation
+                gpu_count: 1
+                gpu_nvidia:
+                    - architecture: Ada
+                      cudaCores: 18176
+                      memoryTotal: "51527024640"
+                      name: NVIDIA RTX 6000 Ada Generation
+                      uuid: GPU-81472f56-a77d-0f42-d502-c4b9b8fd2bbf
+                host: ml-ai-ubuntu-gpu-6000adax1-48gb-tor1
+                memory:
+                    total: "67422818304"
+                os: Linux-5.15.0-113-generic-x86_64-with-glibc2.35
+                program: /root/Crop-Classifier/Crop-Classifier/train_cashew.py
+                python: CPython 3.10.18
+                root: /root/Crop-Classifier/Crop-Classifier
+                startedAt: "2025-07-15T05:06:22.078240Z"
+                writerId: n6hbum2og31k341xxekm1y66og1urwg9
+        m: []
+        python_version: 3.10.18
+        t:
+            "1":
+                - 1
+                - 5
+                - 41
+                - 49
+                - 53
+                - 63
+            "2":
+                - 1
+                - 5
+                - 41
+                - 49
+                - 53
+                - 63
+            "3":
+                - 2
+                - 13
+                - 16
+            "4": 3.10.18
+            "5": 0.21.0
+            "12": 0.21.0
+            "13": linux-x86_64
+batch_size:
+    value: 48
+crop_name:
+    value: cashew
+learning_rate:
+    value: 0.0001
+model_name:
+    value: efficientnet_b1
+num_classes:
+    value: 5
+num_epochs:
+    value: 50
+patience:
+    value: 10
+weight_decay:
+    value: 1e-05

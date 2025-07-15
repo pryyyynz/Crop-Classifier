@@ -1,0 +1,557 @@
+Using device: cuda
+Classes: ['fall_armyworm', 'grasshoper', 'healthy', 'leaf_beetle', 'leaf_blight', 'leaf_spot', 'streak_virus']
+Train dataset size: 19426
+Validation dataset size: 5125
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:287: FutureWarning: `torch.cuda.amp.GradScaler(args...)` is deprecated. Please use `torch.amp.GradScaler('cuda', args...)` instead.
+  scaler = GradScaler()
+
+Epoch 1/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 1.9405
+Batch 100/405, Loss: 0.5578
+Batch 200/405, Loss: 0.5540
+Batch 300/405, Loss: 0.5266
+Batch 400/405, Loss: 0.3607
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.5855, Train Acc: 79.11%
+Val Loss: 0.3445, Val Acc: 87.16%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 87.16%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.95      0.94      0.94       284
+   grasshoper       0.92      0.99      0.95       411
+      healthy       0.68      0.93      0.79       211
+  leaf_beetle       0.99      0.95      0.97       950
+  leaf_blight       0.81      0.83      0.82      1004
+    leaf_spot       0.83      0.74      0.78      1261
+ streak_virus       0.89      0.92      0.90      1004
+
+     accuracy                           0.87      5125
+    macro avg       0.87      0.90      0.88      5125
+ weighted avg       0.87      0.87      0.87      5125
+
+
+Epoch 2/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.3645
+Batch 100/405, Loss: 0.3967
+Batch 200/405, Loss: 0.2301
+Batch 300/405, Loss: 0.3194
+Batch 400/405, Loss: 0.2376
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.2535, Train Acc: 90.40%
+Val Loss: 0.2681, Val Acc: 89.89%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 89.89%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.95      0.99      0.97       284
+   grasshoper       0.98      1.00      0.99       411
+      healthy       0.67      0.95      0.79       211
+  leaf_beetle       0.99      0.99      0.99       950
+  leaf_blight       0.82      0.87      0.85      1004
+    leaf_spot       0.87      0.76      0.81      1261
+ streak_virus       0.95      0.94      0.94      1004
+
+     accuracy                           0.90      5125
+    macro avg       0.89      0.93      0.90      5125
+ weighted avg       0.90      0.90      0.90      5125
+
+
+Epoch 3/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.1946
+Batch 100/405, Loss: 0.2706
+Batch 200/405, Loss: 0.1554
+Batch 300/405, Loss: 0.1933
+Batch 400/405, Loss: 0.2968
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.1642, Train Acc: 93.80%
+Val Loss: 0.2477, Val Acc: 91.67%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 91.67%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.99      0.97      0.98       284
+   grasshoper       0.99      1.00      0.99       411
+      healthy       0.77      0.98      0.86       211
+  leaf_beetle       0.99      0.99      0.99       950
+  leaf_blight       0.80      0.95      0.87      1004
+    leaf_spot       0.95      0.74      0.83      1261
+ streak_virus       0.94      0.97      0.95      1004
+
+     accuracy                           0.92      5125
+    macro avg       0.92      0.94      0.93      5125
+ weighted avg       0.92      0.92      0.92      5125
+
+
+Epoch 4/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0774
+Batch 100/405, Loss: 0.1239
+Batch 200/405, Loss: 0.0933
+Batch 300/405, Loss: 0.2584
+Batch 400/405, Loss: 0.1163
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.1240, Train Acc: 95.31%
+Val Loss: 0.2108, Val Acc: 93.56%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 93.56%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.97      1.00      0.98       284
+   grasshoper       0.99      1.00      0.99       411
+      healthy       0.81      0.99      0.89       211
+  leaf_beetle       0.99      0.99      0.99       950
+  leaf_blight       0.87      0.93      0.90      1004
+    leaf_spot       0.95      0.82      0.88      1261
+ streak_virus       0.94      0.98      0.96      1004
+
+     accuracy                           0.94      5125
+    macro avg       0.93      0.96      0.94      5125
+ weighted avg       0.94      0.94      0.94      5125
+
+
+Epoch 5/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0580
+Batch 100/405, Loss: 0.0766
+Batch 200/405, Loss: 0.1068
+Batch 300/405, Loss: 0.0782
+Batch 400/405, Loss: 0.1088
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0941, Train Acc: 96.25%
+Val Loss: 0.2544, Val Acc: 93.25%
+
+Epoch 6/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0614
+Batch 100/405, Loss: 0.0195
+Batch 200/405, Loss: 0.0504
+Batch 300/405, Loss: 0.0380
+Batch 400/405, Loss: 0.0753
+Train Loss: 0.0755, Train Acc: 97.07%
+Val Loss: 0.4080, Val Acc: 93.89%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 93.89%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.97      1.00      0.98       284
+   grasshoper       0.98      1.00      0.99       411
+      healthy       0.84      0.95      0.89       211
+  leaf_beetle       1.00      0.99      1.00       950
+  leaf_blight       0.86      0.96      0.91      1004
+    leaf_spot       0.95      0.82      0.88      1261
+ streak_virus       0.95      0.98      0.96      1004
+
+     accuracy                           0.94      5125
+    macro avg       0.94      0.96      0.94      5125
+ weighted avg       0.94      0.94      0.94      5125
+
+
+Epoch 7/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0252
+Batch 100/405, Loss: 0.0479
+Batch 200/405, Loss: 0.0266
+Batch 300/405, Loss: 0.0485
+Batch 400/405, Loss: 0.0274
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0716, Train Acc: 97.20%
+Val Loss: 0.2584, Val Acc: 94.05%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 94.05%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.99      0.98      0.99       284
+   grasshoper       0.98      1.00      0.99       411
+      healthy       0.84      0.98      0.91       211
+  leaf_beetle       0.99      0.99      0.99       950
+  leaf_blight       0.87      0.95      0.91      1004
+    leaf_spot       0.95      0.84      0.89      1261
+ streak_virus       0.95      0.97      0.96      1004
+
+     accuracy                           0.94      5125
+    macro avg       0.94      0.96      0.95      5125
+ weighted avg       0.94      0.94      0.94      5125
+
+
+Epoch 8/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0526
+Batch 100/405, Loss: 0.0379
+Batch 200/405, Loss: 0.0380
+Batch 300/405, Loss: 0.0587
+Batch 400/405, Loss: 0.0711
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0618, Train Acc: 97.48%
+Val Loss: 0.2825, Val Acc: 93.76%
+
+Epoch 9/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0105
+Batch 100/405, Loss: 0.0736
+Batch 200/405, Loss: 0.1159
+Batch 300/405, Loss: 0.1304
+Batch 400/405, Loss: 0.0651
+Train Loss: 0.0583, Train Acc: 97.70%
+Val Loss: 0.2627, Val Acc: 94.26%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 94.26%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.98      1.00      0.99       284
+   grasshoper       1.00      0.99      0.99       411
+      healthy       0.81      0.99      0.89       211
+  leaf_beetle       0.99      1.00      0.99       950
+  leaf_blight       0.88      0.95      0.91      1004
+    leaf_spot       0.96      0.83      0.89      1261
+ streak_virus       0.96      0.98      0.97      1004
+
+     accuracy                           0.94      5125
+    macro avg       0.94      0.96      0.95      5125
+ weighted avg       0.95      0.94      0.94      5125
+
+
+Epoch 10/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0564
+Batch 100/405, Loss: 0.0654
+Batch 200/405, Loss: 0.1175
+Batch 300/405, Loss: 0.0469
+Batch 400/405, Loss: 0.0948
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0555, Train Acc: 97.70%
+Val Loss: 0.3185, Val Acc: 94.03%
+
+Epoch 11/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0191
+Batch 100/405, Loss: 0.0156
+Batch 200/405, Loss: 0.0384
+Batch 300/405, Loss: 0.1090
+Batch 400/405, Loss: 0.0091
+Train Loss: 0.0347, Train Acc: 98.42%
+Val Loss: 0.3174, Val Acc: 94.81%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 94.81%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.99      0.99      0.99       284
+   grasshoper       1.00      1.00      1.00       411
+      healthy       0.85      0.99      0.91       211
+  leaf_beetle       1.00      1.00      1.00       950
+  leaf_blight       0.87      0.97      0.91      1004
+    leaf_spot       0.97      0.84      0.90      1261
+ streak_virus       0.96      0.98      0.97      1004
+
+     accuracy                           0.95      5125
+    macro avg       0.95      0.97      0.95      5125
+ weighted avg       0.95      0.95      0.95      5125
+
+
+Epoch 12/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0430
+Batch 100/405, Loss: 0.0434
+Batch 200/405, Loss: 0.0038
+Batch 300/405, Loss: 0.0205
+Batch 400/405, Loss: 0.0231
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0227, Train Acc: 98.85%
+Val Loss: 0.3265, Val Acc: 94.91%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 94.91%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.99      0.99      0.99       284
+   grasshoper       1.00      1.00      1.00       411
+      healthy       0.87      0.99      0.93       211
+  leaf_beetle       1.00      1.00      1.00       950
+  leaf_blight       0.87      0.96      0.91      1004
+    leaf_spot       0.96      0.85      0.90      1261
+ streak_virus       0.96      0.98      0.97      1004
+
+     accuracy                           0.95      5125
+    macro avg       0.95      0.97      0.96      5125
+ weighted avg       0.95      0.95      0.95      5125
+
+
+Epoch 13/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0024
+Batch 100/405, Loss: 0.0031
+Batch 200/405, Loss: 0.0124
+Batch 300/405, Loss: 0.0158
+Batch 400/405, Loss: 0.0061
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0221, Train Acc: 98.85%
+Val Loss: 0.3783, Val Acc: 94.83%
+
+Epoch 14/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0014
+Batch 100/405, Loss: 0.0002
+Batch 200/405, Loss: 0.0203
+Batch 300/405, Loss: 0.0138
+Batch 400/405, Loss: 0.0020
+Train Loss: 0.0217, Train Acc: 98.79%
+Val Loss: 0.4650, Val Acc: 94.73%
+
+Epoch 15/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0607
+Batch 100/405, Loss: 0.0363
+Batch 200/405, Loss: 0.0031
+Batch 300/405, Loss: 0.0021
+Batch 400/405, Loss: 0.0106
+Train Loss: 0.0251, Train Acc: 98.75%
+Val Loss: 0.4052, Val Acc: 94.81%
+
+Epoch 16/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0408
+Batch 100/405, Loss: 0.0149
+Batch 200/405, Loss: 0.0929
+Batch 300/405, Loss: 0.0643
+Batch 400/405, Loss: 0.0328
+Train Loss: 0.0241, Train Acc: 98.79%
+Val Loss: 0.4299, Val Acc: 95.04%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 95.04%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.98      0.99      0.98       284
+   grasshoper       1.00      1.00      1.00       411
+      healthy       0.86      0.99      0.92       211
+  leaf_beetle       0.99      1.00      1.00       950
+  leaf_blight       0.88      0.97      0.92      1004
+    leaf_spot       0.96      0.85      0.90      1261
+ streak_virus       0.96      0.98      0.97      1004
+
+     accuracy                           0.95      5125
+    macro avg       0.95      0.97      0.96      5125
+ weighted avg       0.95      0.95      0.95      5125
+
+
+Epoch 17/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0126
+Batch 100/405, Loss: 0.0038
+Batch 200/405, Loss: 0.0003
+Batch 300/405, Loss: 0.0292
+Batch 400/405, Loss: 0.0066
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0196, Train Acc: 98.97%
+Val Loss: 0.4606, Val Acc: 95.16%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 95.16%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.99      0.98      0.98       284
+   grasshoper       1.00      1.00      1.00       411
+      healthy       0.88      0.99      0.93       211
+  leaf_beetle       0.99      1.00      1.00       950
+  leaf_blight       0.88      0.96      0.92      1004
+    leaf_spot       0.96      0.86      0.91      1261
+ streak_virus       0.96      0.98      0.97      1004
+
+     accuracy                           0.95      5125
+    macro avg       0.95      0.97      0.96      5125
+ weighted avg       0.95      0.95      0.95      5125
+
+
+Epoch 18/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0204
+Batch 100/405, Loss: 0.0210
+Batch 200/405, Loss: 0.0005
+Batch 300/405, Loss: 0.0411
+Batch 400/405, Loss: 0.0016
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0156, Train Acc: 99.05%
+Val Loss: 0.4603, Val Acc: 95.41%
+Model saved as ONNX: models/best_maize_model.onnx
+
+Best validation accuracy: 95.41%
+Classification Report:
+               precision    recall  f1-score   support
+
+fall_armyworm       0.99      0.98      0.99       284
+   grasshoper       1.00      1.00      1.00       411
+      healthy       0.88      0.99      0.93       211
+  leaf_beetle       0.99      1.00      1.00       950
+  leaf_blight       0.89      0.96      0.92      1004
+    leaf_spot       0.96      0.87      0.91      1261
+ streak_virus       0.97      0.98      0.98      1004
+
+     accuracy                           0.95      5125
+    macro avg       0.95      0.97      0.96      5125
+ weighted avg       0.96      0.95      0.95      5125
+
+
+Epoch 19/50
+--------------------------------------------------
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:114: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Batch 0/405, Loss: 0.0105
+Batch 100/405, Loss: 0.0046
+Batch 200/405, Loss: 0.0257
+Batch 300/405, Loss: 0.0206
+Batch 400/405, Loss: 0.0310
+/root/Crop-Classifier/Crop-Classifier/train_maize.py:149: FutureWarning: `torch.cuda.amp.autocast(args...)` is deprecated. Please use `torch.amp.autocast('cuda', args...)` instead.
+  with autocast():
+Train Loss: 0.0160, Train Acc: 99.14%
+Val Loss: 0.5208, Val Acc: 94.75%
+
+Epoch 20/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0102
+Batch 100/405, Loss: 0.0231
+Batch 200/405, Loss: 0.0230
+Batch 300/405, Loss: 0.0213
+Batch 400/405, Loss: 0.0009
+Train Loss: 0.0166, Train Acc: 99.03%
+Val Loss: 0.3973, Val Acc: 95.32%
+
+Epoch 21/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0091
+Batch 100/405, Loss: 0.0011
+Batch 200/405, Loss: 0.0144
+Batch 300/405, Loss: 0.0193
+Batch 400/405, Loss: 0.0168
+Train Loss: 0.0149, Train Acc: 99.04%
+Val Loss: 0.4212, Val Acc: 95.04%
+
+Epoch 22/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0516
+Batch 100/405, Loss: 0.0002
+Batch 200/405, Loss: 0.0002
+Batch 300/405, Loss: 0.0151
+Batch 400/405, Loss: 0.0063
+Train Loss: 0.0155, Train Acc: 99.01%
+Val Loss: 0.4644, Val Acc: 95.16%
+
+Epoch 23/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0004
+Batch 100/405, Loss: 0.0166
+Batch 200/405, Loss: 0.0004
+Batch 300/405, Loss: 0.0286
+Batch 400/405, Loss: 0.0003
+Train Loss: 0.0143, Train Acc: 99.07%
+Val Loss: 0.4585, Val Acc: 94.97%
+
+Epoch 24/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0013
+Batch 100/405, Loss: 0.0174
+Batch 200/405, Loss: 0.0153
+Batch 300/405, Loss: 0.0051
+Batch 400/405, Loss: 0.0031
+Train Loss: 0.0133, Train Acc: 99.12%
+Val Loss: 0.4709, Val Acc: 95.18%
+
+Epoch 25/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0001
+Batch 100/405, Loss: 0.0217
+Batch 200/405, Loss: 0.0617
+Batch 300/405, Loss: 0.0002
+Batch 400/405, Loss: 0.0276
+Train Loss: 0.0130, Train Acc: 99.14%
+Val Loss: 0.4784, Val Acc: 95.30%
+
+Epoch 26/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0175
+Batch 100/405, Loss: 0.0004
+Batch 200/405, Loss: 0.0169
+Batch 300/405, Loss: 0.0278
+Batch 400/405, Loss: 0.0003
+Train Loss: 0.0129, Train Acc: 99.12%
+Val Loss: 0.5180, Val Acc: 95.24%
+
+Epoch 27/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0006
+Batch 100/405, Loss: 0.0163
+Batch 200/405, Loss: 0.0133
+Batch 300/405, Loss: 0.0001
+Batch 400/405, Loss: 0.0036
+Train Loss: 0.0137, Train Acc: 99.12%
+Val Loss: 0.4923, Val Acc: 94.81%
+
+Epoch 28/50
+--------------------------------------------------
+Batch 0/405, Loss: 0.0440
+Batch 100/405, Loss: 0.0121
+Batch 200/405, Loss: 0.0030
+Batch 300/405, Loss: 0.0005
+Batch 400/405, Loss: 0.0314
+Train Loss: 0.0127, Train Acc: 99.18%
+Val Loss: 0.5042, Val Acc: 94.97%
+Early stopping triggered after 10 epochs without improvement
+
+Training completed! Best validation accuracy: 95.41%

@@ -1,2 +1,7 @@
 # Environment Variables
 .env
+
+
+data/
+models/
+__pycache__/

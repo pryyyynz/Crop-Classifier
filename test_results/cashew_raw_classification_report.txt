@@ -1,0 +1,19 @@
+CASHEW TEST RESULTS ON RAW DATA
+============================================================
+Overall Accuracy: 98.78%
+Total Images Tested: 6549
+Correctly Classified: 6469
+Misclassified: 80
+
+Detailed Classification Report:
+              precision    recall  f1-score   support
+
+ anthracnose      0.970     0.990     0.980      1729
+     gumosis      1.000     1.000     1.000       392
+     healthy      0.996     0.996     0.996      1368
+  leaf_miner      0.984     0.996     0.990      1378
+    red_rust      1.000     0.968     0.984      1682
+
+    accuracy                          0.988      6549
+   macro avg      0.990     0.990     0.990      6549
+weighted avg      0.988     0.988     0.988      6549
