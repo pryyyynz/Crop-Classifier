@@ -1,5 +1,6 @@
 {
-  "name": "my-v0-project",
+  "name": "web-app",
+  "description": "Web application for Crop Classifier",
   "version": "0.1.0",
   "private": true,
   "scripts": {
