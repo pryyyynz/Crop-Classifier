@@ -1,0 +1,109 @@
+{
+    "Combined": {
+      "Augmented": {
+        "Cashew": {
+          "test_set": [
+            "anthracnose",
+            "gumosis",
+            "healthy",
+            "leaf_miner",
+            "red_rust"
+          ],
+          "train_set": [
+            "anthracnose",
+            "gumosis",
+            "healthy",
+            "leaf_miner",
+            "red_rust"
+          ]
+        },
+        "Cassava": {
+          "test_set": [
+            "bacterial_blight",
+            "brown_spot",
+            "green_mite",
+            "healthy",
+            "mosaic"
+          ],
+          "train_set": [
+            "bacterial_blight",
+            "brown_spot",
+            "green_mite",
+            "healthy",
+            "mosaic"
+          ]
+        },
+        "Maize": {
+          "test_set": [
+            "fall_armyworm",
+            "grasshoper",
+            "healthy",
+            "leaf_beetle",
+            "leaf_blight",
+            "leaf_spot",
+            "streak_virus"
+          ],
+          "train_set": [
+            "fall_armyworm",
+            "grasshoper",
+            "healthy",
+            "leaf_beetle",
+            "leaf_blight",
+            "leaf_spot",
+            "streak_virus"
+          ]
+        },
+        "Tomato": {
+          "test_set": [
+            "healthy",
+            "leaf_blight",
+            "leaf_curl",
+            "septoria_leaf_spot",
+            "verticulium_wilt"
+          ],
+          "train_set": [
+            "healthy",
+            "leaf_blight",
+            "leaf_curl",
+            "septoria_leaf_spot",
+            "verticulium_wilt"
+          ]
+        }
+      },
+      "Raw": {
+        "CCMT": {
+          "Cashew": [
+            "anthracnose",
+            "gumosis",
+            "healthy",
+            "leaf_miner",
+            "red_rust"
+          ],
+          "Cassava": [
+            "bacterial_blight",
+            "brown_spot",
+            "green_mite",
+            "healthy",
+            "mosaic"
+          ],
+          "Maize": [
+            "fall_armyworm",
+            "grasshoper",
+            "healthy",
+            "leaf_beetle",
+            "leaf_blight",
+            "leaf_spot",
+            "streak_virus"
+          ],
+          "Tomato": [
+            "healthy",
+            "leaf_blight",
+            "leaf_curl",
+            "septoria_leaf_spot",
+            "verticulium_wilt"
+          ]
+        }
+      }
+    }
+  }
+  
