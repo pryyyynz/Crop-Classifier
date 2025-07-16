@@ -1,7 +1,9 @@
-# Environment Variables
 .env
 
+.DS_Store
+backend/data/Combined/
+backend/training/models/*
+!backend/training/models/
+!backend/training/models/*.png
 
-data/
-models/
 __pycache__/
