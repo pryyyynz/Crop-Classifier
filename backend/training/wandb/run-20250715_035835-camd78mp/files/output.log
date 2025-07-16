@@ -1,0 +1,10 @@
+Using device: cuda
+Classes: ['bacterial_blight', 'brown_spot', 'green_mite', 'healthy', 'mosaic']
+Train dataset size: 16971
+Validation dataset size: 7510
+Traceback (most recent call last):
+  File "/root/Crop-Classifier/Crop-Classifier/train_cassava.py", line 361, in <module>
+    main()
+  File "/root/Crop-Classifier/Crop-Classifier/train_cassava.py", line 281, in main
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(
+TypeError: ReduceLROnPlateau.__init__() got an unexpected keyword argument 'verbose'
