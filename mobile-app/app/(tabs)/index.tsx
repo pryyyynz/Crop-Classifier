@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Leaf, Camera, ChevronDown, X } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSettings } from '@/contexts/SettingsContext';
 import { getFontSizeMultiplier, getColors } from '@/utils/theme';
 import * as ImagePicker from 'expo-image-picker';
+import { apiService, ClassificationResult } from '@/utils/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ScanScreen() {
   const { darkMode, fontSize } = useSettings();
@@ -13,6 +15,7 @@ export default function ScanScreen() {
   const [showCropPicker, setShowCropPicker] = useState(false);
   const [notes, setNotes] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
   const router = useRouter();
 
   const fontMultiplier = getFontSizeMultiplier(fontSize);
@@ -20,7 +23,7 @@ export default function ScanScreen() {
 
   const crops = ['Cashew', 'Cassava', 'Maize', 'Tomato'];
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (selectedCrop === 'Select Crop') {
       Alert.alert('Error', 'Please select a crop first');
       return;
@@ -29,7 +32,27 @@ export default function ScanScreen() {
       Alert.alert('Error', 'Please upload or take an image first');
       return;
     }
-    router.push('/analysis-result');
+
+    setIsAnalyzing(true);
+
+    try {
+      // Call the API with the selected image and crop type
+      const result = await apiService.classifyImage(selectedImage, selectedCrop);
+
+      // Store the result and image for the result page
+      await AsyncStorage.setItem('classificationResult', JSON.stringify(result));
+      await AsyncStorage.setItem('analysisImage', selectedImage);
+
+      // Navigate to result page
+      router.push('/analysis-result');
+    } catch (error) {
+      Alert.alert(
+        'Analysis Failed',
+        error instanceof Error ? error.message : 'An unexpected error occurred. Please try again.'
+      );
+    } finally {
+      setIsAnalyzing(false);
+    }
   };
 
   const handleImageUpload = () => {
@@ -58,7 +81,7 @@ export default function ScanScreen() {
       // Request camera permissions
       const { status } = await ImagePicker.requestCameraPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'Sorry, we need camera permissions to take photos!');
+        Alert.alert('Permission Denied', 'Camera permission is required to take photos. Please enable it in your device settings.');
         return;
       }
 
@@ -69,10 +92,11 @@ export default function ScanScreen() {
         quality: 0.8,
       });
 
-      if (!result.canceled && result.assets[0]) {
+      if (!result.canceled && result.assets && result.assets[0]) {
         setSelectedImage(result.assets[0].uri);
       }
     } catch (error) {
+      console.error('Camera error:', error);
       Alert.alert('Error', 'Failed to open camera. Please try again.');
     }
   };
@@ -82,7 +106,7 @@ export default function ScanScreen() {
       // Request media library permissions
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
       if (status !== 'granted') {
-        Alert.alert('Permission Denied', 'Sorry, we need photo library permissions to select images!');
+        Alert.alert('Permission Denied', 'Photo library permission is required to select images. Please enable it in your device settings.');
         return;
       }
 
@@ -93,10 +117,11 @@ export default function ScanScreen() {
         quality: 0.8,
       });
 
-      if (!result.canceled && result.assets[0]) {
+      if (!result.canceled && result.assets && result.assets[0]) {
         setSelectedImage(result.assets[0].uri);
       }
     } catch (error) {
+      console.error('Image library error:', error);
       Alert.alert('Error', 'Failed to open photo library. Please try again.');
     }
   };
@@ -126,11 +151,12 @@ export default function ScanScreen() {
             }
           ]}
           onPress={handleImageUpload}
+          disabled={isAnalyzing}
         >
           {selectedImage ? (
             <View style={styles.imageContainer}>
               <Image source={{ uri: selectedImage }} style={styles.selectedImage} />
-              <TouchableOpacity style={styles.removeButton} onPress={removeImage}>
+              <TouchableOpacity style={styles.removeButton} onPress={removeImage} disabled={isAnalyzing}>
                 <X size={20} color="white" />
               </TouchableOpacity>
             </View>
@@ -147,6 +173,7 @@ export default function ScanScreen() {
         <TouchableOpacity
           style={[styles.dropdown, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}
           onPress={() => setShowCropPicker(!showCropPicker)}
+          disabled={isAnalyzing}
         >
           <Text style={[styles.dropdownText, { color: colors.text, fontSize: 16 * fontMultiplier }]}>{selectedCrop}</Text>
           <ChevronDown size={20} color={colors.textSecondary} />
@@ -176,17 +203,35 @@ export default function ScanScreen() {
             color: colors.text,
             fontSize: 16 * fontMultiplier
           }]}
-          placeholder="Add notes or observations..."
+          placeholder="Add notes or observations (optional)..."
           placeholderTextColor={colors.textSecondary}
           value={notes}
           onChangeText={setNotes}
           multiline
           numberOfLines={3}
           textAlignVertical="top"
+          editable={!isAnalyzing}
         />
 
-        <TouchableOpacity style={styles.analyzeButton} onPress={handleAnalyze}>
-          <Text style={[styles.analyzeButtonText, { fontSize: 16 * fontMultiplier }]}>Analyze</Text>
+        <TouchableOpacity
+          style={[
+            styles.analyzeButton,
+            {
+              backgroundColor: isAnalyzing ? '#9ca3af' : '#22c55e',
+              opacity: (!selectedImage || selectedCrop === 'Select Crop' || isAnalyzing) ? 0.6 : 1
+            }
+          ]}
+          onPress={handleAnalyze}
+          disabled={!selectedImage || selectedCrop === 'Select Crop' || isAnalyzing}
+        >
+          {isAnalyzing ? (
+            <View style={styles.analyzingContainer}>
+              <ActivityIndicator size="small" color="white" style={{ marginRight: 8 }} />
+              <Text style={[styles.analyzeButtonText, { fontSize: 16 * fontMultiplier }]}>Analyzing...</Text>
+            </View>
+          ) : (
+            <Text style={[styles.analyzeButtonText, { fontSize: 16 * fontMultiplier }]}>Analyze</Text>
+          )}
         </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
@@ -301,5 +346,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  analyzingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
