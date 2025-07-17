@@ -53,10 +53,10 @@ export default function HomePage() {
                 <SelectValue placeholder="Select Crop" />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="cashew">Cashew</SelectItem>
+                <SelectItem value="cassava">Cassava</SelectItem>
+                <SelectItem value="maize">Maize</SelectItem>
                 <SelectItem value="tomato">Tomato</SelectItem>
-                <SelectItem value="potato">Potato</SelectItem>
-                <SelectItem value="corn">Corn</SelectItem>
-                <SelectItem value="wheat">Wheat</SelectItem>
               </SelectContent>
             </Select>
           </div>

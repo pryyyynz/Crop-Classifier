@@ -18,7 +18,7 @@ export default function ScanScreen() {
   const fontMultiplier = getFontSizeMultiplier(fontSize);
   const colors = getColors(darkMode);
 
-  const crops = ['Tomato', 'Potato', 'Corn', 'Wheat', 'Rice', 'Soybean'];
+  const crops = ['Cashew', 'Cassava', 'Maize', 'Tomato'];
 
   const handleAnalyze = () => {
     if (selectedCrop === 'Select Crop') {
