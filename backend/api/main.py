@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 from routes.classification import router as classification_router
 from services.model_service import ModelService
+from services.llm_service import LLMService
 
 # Load environment variables
 load_dotenv()
@@ -26,8 +27,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize model service on startup
+# Initialize services on startup
 model_service = ModelService()
+llm_service = LLMService()
 
 
 @app.on_event("startup")
@@ -42,6 +44,10 @@ async def root():
         "message": "Crop Disease Classification API",
         "version": "1.0.0",
         "supported_crops": ["cashew", "cassava", "maize", "tomato"],
+        "features": {
+            "disease_classification": True,
+            "ai_advice": llm_service.is_available()
+        },
         "endpoints": {
             "classification": "/classify",
             "health": "/health"
@@ -52,7 +58,11 @@ async def root():
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {"status": "healthy", "models_loaded": model_service.models_loaded}
+    return {
+        "status": "healthy",
+        "models_loaded": model_service.models_loaded,
+        "llm_available": llm_service.is_available()
+    }
 
 # Include classification routes
 app.include_router(classification_router, prefix="/api",

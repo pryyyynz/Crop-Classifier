@@ -13,12 +13,13 @@ router = APIRouter()
 # Global services (will be initialized in main.py)
 model_service = None
 classification_service = None
+llm_service = None
 
 
 def get_services():
-    """Get model and classification services"""
-    global model_service, classification_service
-    from main import model_service as ms
+    """Get model, classification, and LLM services"""
+    global model_service, classification_service, llm_service
+    from main import model_service as ms, llm_service as ls
 
     if ms is None:
         raise HTTPException(status_code=503, detail="Services not initialized")
@@ -26,25 +27,32 @@ def get_services():
     if classification_service is None:
         classification_service = ClassificationService(ms)
 
-    return ms, classification_service
+    # LLM service is optional
+    llm_service = ls
+
+    return ms, classification_service, llm_service
 
 
 @router.post("/classify")
 async def classify_image(
     image: UploadFile = File(...),
     crop_type: str = Form(...),
-    notes: Optional[str] = Form(None)
+    notes: Optional[str] = Form(None),
+    user_question: Optional[str] = Form(None),
+    enable_ai_advice: bool = Form(True)
 ):
     """
-    Classify crop disease from uploaded image
+    Classify crop disease from uploaded image with optional AI-powered advice
 
     Parameters:
     - image: Image file (JPEG, PNG)
     - crop_type: Type of crop (cashew, cassava, maize, tomato)
-    - notes: Optional notes about the image
+    - notes: Optional notes about the image/plant condition
+    - user_question: Optional specific question about the disease/plant
+    - enable_ai_advice: Whether to generate AI-powered advice (default: True)
 
     Returns:
-    - Classification results with disease prediction and confidence
+    - Classification results with disease prediction, confidence, and optional AI advice
     """
     try:
         # Validate crop type
@@ -63,7 +71,7 @@ async def classify_image(
             )
 
         # Get services
-        model_service, classification_service = get_services()
+        model_service, classification_service, llm_service = get_services()
 
         # Check if models are loaded
         if not model_service.models_loaded:
@@ -87,8 +95,36 @@ async def classify_image(
             "filename": image.filename,
             "file_size": len(image_bytes),
             "notes": notes,
+            "user_question": user_question,
             "status": "success"
         })
+
+        # Generate AI advice if enabled and service is available
+        if enable_ai_advice and llm_service and llm_service.is_available():
+            try:
+                logger.info("Generating AI-powered disease advice...")
+                ai_advice = await llm_service.generate_disease_advice(
+                    crop_type=crop_type.lower(),
+                    predicted_disease=result["predicted_disease"],
+                    confidence=result["confidence"],
+                    is_healthy=result["is_healthy"],
+                    base_description=result["description"],
+                    user_question=user_question,
+                    user_notes=notes
+                )
+                result["ai_advice"] = ai_advice
+                logger.info("AI advice generated successfully")
+            except Exception as e:
+                logger.error(f"Failed to generate AI advice: {str(e)}")
+                # Don't fail the entire request if AI advice fails
+                result["ai_advice"] = None
+                result["ai_advice_error"] = "AI advice temporarily unavailable"
+        else:
+            result["ai_advice"] = None
+            if not enable_ai_advice:
+                logger.info("AI advice disabled by user")
+            elif not llm_service or not llm_service.is_available():
+                logger.info("AI advice service not available")
 
         logger.info(
             f"Classification completed: {result['predicted_disease']} ({result['confidence']}%)")
@@ -107,7 +143,7 @@ async def classify_image(
 async def get_supported_crops():
     """Get list of supported crop types"""
     try:
-        model_service, _ = get_services()
+        model_service, _, _ = get_services()
 
         crops_info = {}
         for crop_type in model_service.class_mappings.keys():
@@ -131,22 +167,19 @@ async def get_supported_crops():
 async def get_crop_info(crop_type: str):
     """Get detailed information about a specific crop"""
     try:
-        model_service, _ = get_services()
+        model_service, _, _ = get_services()
 
         if crop_type.lower() not in model_service.class_mappings:
             raise HTTPException(
                 status_code=404,
-                detail=f"Crop type '{crop_type}' not found"
+                detail=f"Crop type '{crop_type}' not found. Supported crops: {list(model_service.class_mappings.keys())}"
             )
-
-        crop_classes = model_service.class_mappings[crop_type.lower()]
 
         return {
             "crop_type": crop_type.lower(),
-            "classes": crop_classes,
-            "total_classes": len(crop_classes),
+            "classes": model_service.class_mappings[crop_type.lower()],
             "model_loaded": model_service.is_model_loaded(crop_type.lower()),
-            "description": f"Disease classification model for {crop_type} crops"
+            "total_classes": len(model_service.class_mappings[crop_type.lower()])
         }
 
     except HTTPException:
@@ -160,21 +193,16 @@ async def get_crop_info(crop_type: str):
 async def batch_classify_images(
     images: list[UploadFile] = File(...),
     crop_types: list[str] = Form(...),
-    notes: Optional[list[str]] = Form(None)
+    notes: Optional[list[str]] = Form(None),
+    # Disabled by default for batch processing
+    enable_ai_advice: bool = Form(False)
 ):
     """
-    Classify multiple images in batch
+    Classify multiple crop disease images
 
-    Parameters:
-    - images: List of image files
-    - crop_types: List of crop types (must match number of images)
-    - notes: Optional list of notes for each image
-
-    Returns:
-    - List of classification results
+    Note: AI advice is disabled by default for batch processing to reduce processing time.
     """
     try:
-        # Validate inputs
         if len(images) != len(crop_types):
             raise HTTPException(
                 status_code=400,
@@ -184,12 +212,13 @@ async def batch_classify_images(
         if len(images) > 10:  # Limit batch size
             raise HTTPException(
                 status_code=400,
-                detail="Maximum 10 images per batch request"
+                detail="Maximum 10 images allowed per batch"
             )
 
         # Get services
-        model_service, classification_service = get_services()
+        model_service, classification_service, llm_service = get_services()
 
+        # Check if models are loaded
         if not model_service.models_loaded:
             raise HTTPException(
                 status_code=503,
@@ -222,6 +251,24 @@ async def batch_classify_images(
                     "notes": notes[i] if notes and i < len(notes) else None,
                     "status": "success"
                 })
+
+                # Generate AI advice if enabled (note: this will significantly slow down batch processing)
+                if enable_ai_advice and llm_service and llm_service.is_available():
+                    try:
+                        ai_advice = await llm_service.generate_disease_advice(
+                            crop_type=crop_type.lower(),
+                            predicted_disease=result["predicted_disease"],
+                            confidence=result["confidence"],
+                            is_healthy=result["is_healthy"],
+                            base_description=result["description"],
+                            user_notes=notes[i] if notes and i < len(
+                                notes) else None
+                        )
+                        result["ai_advice"] = ai_advice
+                    except Exception as e:
+                        logger.error(
+                            f"Failed to generate AI advice for batch item {i}: {str(e)}")
+                        result["ai_advice"] = None
 
                 results.append(result)
 

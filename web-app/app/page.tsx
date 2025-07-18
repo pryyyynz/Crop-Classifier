@@ -2,9 +2,12 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { Leaf, Menu, Camera, Upload } from "lucide-react"
+import { Leaf, Menu, Camera, Upload, MessageCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useTheme } from "next-themes"
 import { useEffect, useState, useRef } from "react"
@@ -20,6 +23,8 @@ export default function HomePage() {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [userQuestion, setUserQuestion] = useState<string>("")
+  const [enableAiAdvice, setEnableAiAdvice] = useState<boolean>(false)
 
   useEffect(() => {
     console.log("Current theme:", theme)
@@ -55,7 +60,13 @@ export default function HomePage() {
     setError(null)
 
     try {
-      const result = await apiService.classifyImage(selectedImage, selectedCrop)
+      const result = await apiService.classifyImage(
+        selectedImage,
+        selectedCrop,
+        undefined, // No notes
+        userQuestion.trim() || undefined,
+        enableAiAdvice
+      )
 
       // Store the result and image in sessionStorage to pass to result page
       sessionStorage.setItem('classificationResult', JSON.stringify(result))
@@ -89,9 +100,12 @@ export default function HomePage() {
       {/* Main Content */}
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-medium text-gray-900 dark:text-white mb-8">
+          <h1 className="text-2xl font-medium text-gray-900 dark:text-white mb-2">
             Detect crop diseases instantly with AI
           </h1>
+          <p className="text-gray-600 dark:text-gray-300 mb-8">
+            Get instant disease detection and personalized farming advice
+          </p>
 
           {/* Upload Area */}
           <div
@@ -134,6 +148,9 @@ export default function HomePage() {
 
           {/* Crop Selection */}
           <div className="mb-6">
+            {/* <Label htmlFor="crop-select" className="block text-left mb-2 text-gray-700 dark:text-gray-300">
+              Select Crop Type
+            </Label> */}
             <Select onValueChange={setSelectedCrop} value={selectedCrop}>
               <SelectTrigger className="w-full max-w-md mx-auto">
                 <SelectValue placeholder="Select Crop" />
@@ -147,14 +164,43 @@ export default function HomePage() {
             </Select>
           </div>
 
-          {/* Text Input */}
-          <div className="mb-6">
-            <input
-              type="text"
-              placeholder="Enter additional notes (optional)"
-              className="w-full max-w-md mx-auto px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400"
-            />
+          {/* AI Advice Toggle */}
+          <div className="mb-6 max-w-md mx-auto">
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="ai-advice"
+                checked={enableAiAdvice}
+                onCheckedChange={(checked) => {
+                  setEnableAiAdvice(checked as boolean)
+                  // Clear question when AI advice is disabled
+                  if (!checked) {
+                    setUserQuestion("")
+                  }
+                }}
+              />
+              <Label htmlFor="ai-advice" className="text-sm text-gray-700 dark:text-gray-300">
+                Get AI-powered farming advice and solutions
+              </Label>
+            </div>
           </div>
+
+          {/* Question Input - Only shown when AI advice is enabled */}
+          {enableAiAdvice && (
+            <div className="mb-6 text-left max-w-md mx-auto">
+              <Label htmlFor="question" className="flex items-center gap-2 mb-2 text-gray-700 dark:text-gray-300">
+                <MessageCircle className="w-4 h-4" />
+                Ask a Question (Optional)
+              </Label>
+              <Input
+                id="question"
+                type="text"
+                placeholder="What should I do? How to prevent this? etc."
+                value={userQuestion}
+                onChange={(e) => setUserQuestion(e.target.value)}
+                className="w-full"
+              />
+            </div>
+          )}
 
           {/* Error Message */}
           {error && (
@@ -172,30 +218,12 @@ export default function HomePage() {
             {isAnalyzing ? (
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                Analyzing...
+                {enableAiAdvice ? 'Analyzing & Generating Advice...' : 'Analyzing...'}
               </div>
             ) : (
-              'Analyze'
+              'Analyze Disease'
             )}
           </Button>
-        </div>
-
-        {/* Latest Analysis */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6">
-          <h2 className="text-xl font-medium text-gray-900 dark:text-white mb-4">Latest Analysis</h2>
-          <div className="flex items-center gap-4 p-2">
-            <Image
-              src="/placeholder.svg?height=60&width=60"
-              alt="Plant leaf"
-              width={60}
-              height={60}
-              className="rounded-lg object-cover"
-            />
-            <div className="flex-1">
-              <h3 className="text-lg font-medium text-gray-900 dark:text-white">No recent analysis</h3>
-              <p className="text-gray-500 dark:text-gray-400">Upload an image to get started</p>
-            </div>
-          </div>
         </div>
       </main>
     </div>

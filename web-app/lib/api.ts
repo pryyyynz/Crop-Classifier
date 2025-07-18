@@ -10,7 +10,18 @@ export interface ClassificationResult {
     }>;
     filename?: string;
     file_size?: number;
+    notes?: string;
+    user_question?: string;
     status: string;
+    ai_advice?: {
+        causes: string;
+        immediate_actions: string;
+        prevention: string;
+        treatment: string;
+        monitoring: string;
+        question_answer?: string;
+    } | null;
+    ai_advice_error?: string;
 }
 
 export interface ClassificationError {
@@ -24,10 +35,26 @@ class ApiService {
         this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5003';
     }
 
-    async classifyImage(imageFile: File, cropType: string): Promise<ClassificationResult> {
+    async classifyImage(
+        imageFile: File,
+        cropType: string,
+        notes?: string,
+        userQuestion?: string,
+        enableAiAdvice: boolean = true
+    ): Promise<ClassificationResult> {
         const formData = new FormData();
         formData.append('image', imageFile);
         formData.append('crop_type', cropType);
+
+        if (notes) {
+            formData.append('notes', notes);
+        }
+
+        if (userQuestion) {
+            formData.append('user_question', userQuestion);
+        }
+
+        formData.append('enable_ai_advice', enableAiAdvice.toString());
 
         const response = await fetch(`${this.baseUrl}/api/classify`, {
             method: 'POST',
