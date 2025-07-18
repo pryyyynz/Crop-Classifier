@@ -92,7 +92,6 @@ export default function HomePage() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
           </div>
         </div>
       </header>

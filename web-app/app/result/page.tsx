@@ -417,13 +417,6 @@ export default function ResultPage() {
           <Button asChild className="bg-green-600 hover:bg-green-700 text-white py-3 px-6">
             <Link href="/">Analyze Another Image</Link>
           </Button>
-          <Button
-            asChild
-            variant="outline"
-            className="border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-950 py-3 px-6 bg-transparent"
-          >
-            <Link href="/">Back to Home</Link>
-          </Button>
         </div>
       </main>
     </div>

@@ -185,14 +185,21 @@ export default function AnalysisResultScreen() {
 
         {/* User Question Display */}
         {result.user_question && (
-          <View style={[styles.card, styles.questionCard]}>
+          <View style={[
+            styles.card,
+            styles.questionCard,
+            {
+              backgroundColor: darkMode ? '#1e3a8a' : '#eff6ff',
+              borderColor: darkMode ? '#3b82f6' : '#3b82f6'
+            }
+          ]}>
             <View style={styles.questionHeader}>
               <MessageCircle size={16} color="#3b82f6" />
               <Text style={[styles.questionTitle, { fontSize: 16 * fontMultiplier }]}>
                 Your Question
               </Text>
             </View>
-            <Text style={[styles.questionText, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
+            <Text style={[styles.questionText, { color: darkMode ? '#e5e7eb' : '#374151', fontSize: 16 * fontMultiplier }]}>
               {result.user_question}
             </Text>
           </View>
@@ -202,7 +209,14 @@ export default function AnalysisResultScreen() {
         {result.ai_advice ? (
           <>
             {/* AI Header */}
-            <View style={[styles.card, styles.aiHeader]}>
+            <View style={[
+              styles.card,
+              styles.aiHeader,
+              {
+                backgroundColor: darkMode ? '#581c87' : '#faf5ff',
+                borderColor: '#8b5cf6'
+              }
+            ]}>
               <View style={styles.aiTitleContainer}>
                 <Brain size={20} color="#8b5cf6" />
                 <Text style={[styles.aiTitle, { fontSize: 18 * fontMultiplier }]}>
@@ -216,14 +230,21 @@ export default function AnalysisResultScreen() {
 
             {/* Answer to User Question - Show FIRST if exists */}
             {result.ai_advice.question_answer && result.user_question && (
-              <View style={[styles.card, styles.answerCard]}>
+              <View style={[
+                styles.card,
+                styles.answerCard,
+                {
+                  backgroundColor: darkMode ? '#1e3a8a' : '#eff6ff',
+                  borderColor: '#3b82f6'
+                }
+              ]}>
                 <View style={styles.answerHeader}>
                   <MessageCircle size={16} color="#3b82f6" />
                   <Text style={[styles.answerTitle, { fontSize: 16 * fontMultiplier }]}>
                     Answer to Your Question
                   </Text>
                 </View>
-                <Text style={[styles.answerText, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
+                <Text style={[styles.answerText, { color: darkMode ? '#e5e7eb' : '#374151', fontSize: 16 * fontMultiplier }]}>
                   {result.ai_advice.question_answer}
                 </Text>
               </View>
@@ -295,7 +316,14 @@ export default function AnalysisResultScreen() {
         ) : shouldShowAiLoading ? (
           <>
             {/* AI Loading State */}
-            <View style={[styles.card, styles.loadingCard]}>
+            <View style={[
+              styles.card,
+              styles.loadingCard,
+              {
+                backgroundColor: darkMode ? '#581c87' : '#faf5ff',
+                borderColor: '#8b5cf6'
+              }
+            ]}>
               <View style={styles.loadingHeader}>
                 <Brain size={20} color="#8b5cf6" />
                 <Text style={[styles.aiTitle, { fontSize: 18 * fontMultiplier }]}>
@@ -309,7 +337,14 @@ export default function AnalysisResultScreen() {
 
             {/* Question Answer Loading Placeholder */}
             {result.user_question && (
-              <View style={[styles.card, styles.answerCard]}>
+              <View style={[
+                styles.card,
+                styles.answerCard,
+                {
+                  backgroundColor: darkMode ? '#1e3a8a' : '#eff6ff',
+                  borderColor: '#3b82f6'
+                }
+              ]}>
                 <View style={styles.answerHeader}>
                   <MessageCircle size={16} color="#3b82f6" />
                   <Text style={[styles.answerTitle, { fontSize: 16 * fontMultiplier }]}>
@@ -326,7 +361,14 @@ export default function AnalysisResultScreen() {
             )}
 
             {/* AI Loading Placeholder */}
-            <View style={[styles.card, styles.aiLoadingCard]}>
+            <View style={[
+              styles.card,
+              styles.aiLoadingCard,
+              {
+                backgroundColor: darkMode ? '#581c87' : '#faf5ff',
+                borderColor: '#8b5cf6'
+              }
+            ]}>
               <View style={styles.aiLoadingContent}>
                 <View style={styles.aiLoadingIcons}>
                   <ActivityIndicator size="small" color="#8b5cf6" />
@@ -371,15 +413,6 @@ export default function AnalysisResultScreen() {
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={handleTakeAnother}>
             <Text style={[styles.buttonText, { fontSize: 16 * fontMultiplier }]}>Analyze Another Image</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.button, styles.secondaryButton, { borderColor: '#22c55e' }]}
-            onPress={handleGoBack}
-          >
-            <Text style={[styles.buttonText, styles.secondaryButtonText, { fontSize: 16 * fontMultiplier }]}>
-              Back to Home
-            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

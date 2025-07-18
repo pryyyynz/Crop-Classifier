@@ -32,9 +32,8 @@ class ApiService {
     private baseUrl: string;
 
     constructor() {
-        // For mobile app, we'll use localhost for development
-        // In production, this should be your deployed API URL
-        this.baseUrl = 'http://localhost:5003';
+        // Updated to use AWS App Runner URL
+        this.baseUrl = 'https://iumqtt2ins.eu-west-1.awsapprunner.com';
     }
 
     async classifyImage(

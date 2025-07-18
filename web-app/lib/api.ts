@@ -32,7 +32,8 @@ class ApiService {
     private baseUrl: string;
 
     constructor() {
-        this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:5003';
+        // Updated to use AWS App Runner URL, with fallback to environment variable
+        this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://iumqtt2ins.eu-west-1.awsapprunner.com';
     }
 
     async classifyImage(
