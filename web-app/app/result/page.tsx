@@ -12,6 +12,7 @@ import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 import { ClassificationResult } from "@/lib/api"
 import { useRouter } from "next/navigation"
+import { formatAIText } from "@/lib/utils"
 
 export default function ResultPage() {
   const { theme } = useTheme()
@@ -100,7 +101,7 @@ export default function ResultPage() {
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
-            <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+            {/* <Menu className="w-6 h-6 text-gray-600 dark:text-gray-300" /> */}
           </div>
         </div>
       </header>
@@ -215,9 +216,10 @@ export default function ResultPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {result.ai_advice.question_answer}
-                      </p>
+                      <div
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: formatAIText(result.ai_advice.question_answer) }}
+                      />
                     </CardContent>
                   </Card>
                 )}
@@ -231,9 +233,10 @@ export default function ResultPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {result.ai_advice.causes}
-                      </p>
+                      <div
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: formatAIText(result.ai_advice.causes) }}
+                      />
                     </CardContent>
                   </Card>
                 )}
@@ -247,9 +250,10 @@ export default function ResultPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {result.ai_advice.immediate_actions}
-                      </p>
+                      <div
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: formatAIText(result.ai_advice.immediate_actions) }}
+                      />
                     </CardContent>
                   </Card>
                 )}
@@ -263,9 +267,10 @@ export default function ResultPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {result.ai_advice.treatment}
-                      </p>
+                      <div
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: formatAIText(result.ai_advice.treatment) }}
+                      />
                     </CardContent>
                   </Card>
                 )}
@@ -279,9 +284,10 @@ export default function ResultPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {result.ai_advice.prevention}
-                      </p>
+                      <div
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: formatAIText(result.ai_advice.prevention) }}
+                      />
                     </CardContent>
                   </Card>
                 )}
@@ -296,9 +302,10 @@ export default function ResultPage() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-                        {result.ai_advice.monitoring}
-                      </p>
+                      <div
+                        className="text-gray-700 dark:text-gray-300 leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: formatAIText(result.ai_advice.monitoring) }}
+                      />
                     </CardContent>
                   </Card>
                 )}

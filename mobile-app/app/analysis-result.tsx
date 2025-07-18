@@ -7,6 +7,7 @@ import { useSettings } from '@/contexts/SettingsContext';
 import { getFontSizeMultiplier, getColors } from '@/utils/theme';
 import { ClassificationResult } from '@/utils/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { FormattedText } from '@/components/FormattedText';
 
 export default function AnalysisResultScreen() {
   const { darkMode, fontSize } = useSettings();
@@ -244,9 +245,10 @@ export default function AnalysisResultScreen() {
                     Answer to Your Question
                   </Text>
                 </View>
-                <Text style={[styles.answerText, { color: darkMode ? '#e5e7eb' : '#374151', fontSize: 16 * fontMultiplier }]}>
-                  {result.ai_advice.question_answer}
-                </Text>
+                <FormattedText
+                  text={result.ai_advice.question_answer}
+                  style={[styles.answerText, { color: darkMode ? '#e5e7eb' : '#374151', fontSize: 16 * fontMultiplier }]}
+                />
               </View>
             )}
 
@@ -256,9 +258,10 @@ export default function AnalysisResultScreen() {
                 <Text style={[styles.aiSectionTitle, { color: '#f97316', fontSize: 16 * fontMultiplier }]}>
                   🔍 What Causes This?
                 </Text>
-                <Text style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
-                  {result.ai_advice.causes}
-                </Text>
+                <FormattedText
+                  text={result.ai_advice.causes}
+                  style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}
+                />
               </View>
             )}
 
@@ -268,9 +271,10 @@ export default function AnalysisResultScreen() {
                 <Text style={[styles.aiSectionTitle, { color: '#ef4444', fontSize: 16 * fontMultiplier }]}>
                   ⚡ Immediate Actions
                 </Text>
-                <Text style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
-                  {result.ai_advice.immediate_actions}
-                </Text>
+                <FormattedText
+                  text={result.ai_advice.immediate_actions}
+                  style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}
+                />
               </View>
             )}
 
@@ -280,9 +284,10 @@ export default function AnalysisResultScreen() {
                 <Text style={[styles.aiSectionTitle, { color: '#3b82f6', fontSize: 16 * fontMultiplier }]}>
                   💊 Treatment Options
                 </Text>
-                <Text style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
-                  {result.ai_advice.treatment}
-                </Text>
+                <FormattedText
+                  text={result.ai_advice.treatment}
+                  style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}
+                />
               </View>
             )}
 
@@ -292,9 +297,10 @@ export default function AnalysisResultScreen() {
                 <Text style={[styles.aiSectionTitle, { color: '#22c55e', fontSize: 16 * fontMultiplier }]}>
                   🛡️ Prevention Strategies
                 </Text>
-                <Text style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
-                  {result.ai_advice.prevention}
-                </Text>
+                <FormattedText
+                  text={result.ai_advice.prevention}
+                  style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}
+                />
               </View>
             )}
 
@@ -307,9 +313,10 @@ export default function AnalysisResultScreen() {
                     Monitoring Guide
                   </Text>
                 </View>
-                <Text style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
-                  {result.ai_advice.monitoring}
-                </Text>
+                <FormattedText
+                  text={result.ai_advice.monitoring}
+                  style={[styles.aiSectionText, { color: colors.text, fontSize: 14 * fontMultiplier }]}
+                />
               </View>
             )}
           </>
