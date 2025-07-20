@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, ScrollView, Image, ActivityIndicator, Switch } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Leaf, Camera, ChevronDown, X, MessageCircle, Brain } from 'lucide-react-native';
+import { Leaf, Camera, ChevronDown, X, MessageCircle, Brain, WifiOff, Wifi } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSettings } from '@/contexts/SettingsContext';
 import { getFontSizeMultiplier, getColors } from '@/utils/theme';
 import * as ImagePicker from 'expo-image-picker';
 import { apiService, ClassificationResult } from '@/utils/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { historyService } from '@/utils/historyService';
 
 export default function ScanScreen() {
-  const { darkMode, fontSize } = useSettings();
+  const { darkMode, fontSize, offlineMode, isOnline, canUseOnlineFeatures } = useSettings();
   const [selectedCrop, setSelectedCrop] = useState('Select Crop');
   const [showCropPicker, setShowCropPicker] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
@@ -42,13 +43,18 @@ export default function ScanScreen() {
         selectedImage,
         selectedCrop,
         undefined, // No notes
-        userQuestion.trim() || undefined,
-        enableAiAdvice
+        // Only pass user question if not in offline mode and AI advice is enabled
+        (!offlineMode && enableAiAdvice && userQuestion.trim()) ? userQuestion.trim() : undefined,
+        // Only enable AI advice if not in offline mode
+        !offlineMode && enableAiAdvice
       );
 
       // Store the result and image for the result page
       await AsyncStorage.setItem('classificationResult', JSON.stringify(result));
       await AsyncStorage.setItem('analysisImage', selectedImage);
+
+      // Add to history stack (latest on top)
+      await historyService.addPrediction(result, selectedImage);
 
       // Navigate to result page
       router.push('/analysis-result');
@@ -137,11 +143,39 @@ export default function ScanScreen() {
     setSelectedImage(null);
   };
 
+  const getStatusIndicator = () => {
+    if (offlineMode) {
+      return (
+        <View style={[styles.statusIndicator, { backgroundColor: '#f59e0b' }]}>
+          <WifiOff size={16} color="white" />
+          <Text style={[styles.statusText, { fontSize: 12 * fontMultiplier }]}>Offline Mode</Text>
+        </View>
+      );
+    }
+
+    if (!isOnline) {
+      return (
+        <View style={[styles.statusIndicator, { backgroundColor: '#ef4444' }]}>
+          <WifiOff size={16} color="white" />
+          <Text style={[styles.statusText, { fontSize: 12 * fontMultiplier }]}>No Connection</Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={[styles.statusIndicator, { backgroundColor: '#22c55e' }]}>
+        <Wifi size={16} color="white" />
+        <Text style={[styles.statusText, { fontSize: 12 * fontMultiplier }]}>Online</Text>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { backgroundColor: colors.headerBackground, borderBottomColor: colors.border }]}>
         <Leaf size={24} color="#22c55e" />
-        <Text style={[styles.headerTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>Detect Crop Disease</Text>
+        <Text style={[styles.headerTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>GreenCheck</Text>
+        {getStatusIndicator()}
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -203,57 +237,76 @@ export default function ScanScreen() {
           </View>
         )}
 
-        {/* AI Advice Toggle */}
-        <View style={[styles.aiAdviceContainer, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
-          <View style={styles.aiAdviceHeader}>
-            <Brain size={20} color="#8b5cf6" />
-            <Text style={[styles.aiAdviceTitle, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-              AI-Powered Farming Advice
+        {/* AI Advice Toggle - Only show in online mode */}
+        {!offlineMode && (
+          <>
+            <View style={[styles.aiAdviceContainer, { backgroundColor: colors.cardBackground, borderColor: colors.border }]}>
+              <View style={styles.aiAdviceHeader}>
+                <Brain size={20} color="#8b5cf6" />
+                <Text style={[styles.aiAdviceTitle, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
+                  AI-Powered Farming Advice
+                </Text>
+              </View>
+              <Switch
+                value={enableAiAdvice}
+                onValueChange={(value) => {
+                  setEnableAiAdvice(value);
+                  if (!value) {
+                    setUserQuestion('');
+                  }
+                }}
+                trackColor={{ false: '#d1d5db', true: '#8b5cf6' }}
+                thumbColor={enableAiAdvice ? '#ffffff' : '#ffffff'}
+                disabled={isAnalyzing}
+              />
+            </View>
+
+            <Text style={[styles.aiAdviceDescription, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
+              Get detailed recommendations, treatment options, and personalized farming advice
             </Text>
-          </View>
-          <Switch
-            value={enableAiAdvice}
-            onValueChange={(value) => {
-              setEnableAiAdvice(value);
-              if (!value) {
-                setUserQuestion('');
-              }
-            }}
-            trackColor={{ false: '#d1d5db', true: '#8b5cf6' }}
-            thumbColor={enableAiAdvice ? '#ffffff' : '#ffffff'}
-            disabled={isAnalyzing}
-          />
-        </View>
 
-        <Text style={[styles.aiAdviceDescription, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
-          Get detailed recommendations, treatment options, and personalized farming advice
-        </Text>
+            {/* User Question Input - Only shown when AI advice is enabled and online */}
+            {enableAiAdvice && (
+              <View style={styles.questionContainer}>
+                <View style={styles.questionHeader}>
+                  <MessageCircle size={16} color={colors.textSecondary} />
+                  <Text style={[styles.questionLabel, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
+                    Ask a Question (Optional)
+                  </Text>
+                </View>
+                <TextInput
+                  style={[styles.questionInput, {
+                    backgroundColor: colors.cardBackground,
+                    borderColor: colors.border,
+                    color: colors.text,
+                    fontSize: 16 * fontMultiplier
+                  }]}
+                  placeholder="What should I do? How to prevent this? etc."
+                  placeholderTextColor={colors.textSecondary}
+                  value={userQuestion}
+                  onChangeText={setUserQuestion}
+                  multiline
+                  numberOfLines={2}
+                  textAlignVertical="top"
+                  editable={!isAnalyzing}
+                />
+              </View>
+            )}
+          </>
+        )}
 
-        {/* User Question Input - Only shown when AI advice is enabled */}
-        {enableAiAdvice && (
-          <View style={styles.questionContainer}>
-            <View style={styles.questionHeader}>
-              <MessageCircle size={16} color={colors.textSecondary} />
-              <Text style={[styles.questionLabel, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
-                Ask a Question (Optional)
+        {/* Offline mode info */}
+        {offlineMode && (
+          <View style={[styles.offlineModeInfo, { backgroundColor: colors.cardBackground, borderColor: '#f59e0b' }]}>
+            <View style={styles.offlineInfoHeader}>
+              <WifiOff size={16} color="#f59e0b" />
+              <Text style={[styles.offlineInfoTitle, { color: '#f59e0b', fontSize: 14 * fontMultiplier }]}>
+                Offline Mode
               </Text>
             </View>
-            <TextInput
-              style={[styles.questionInput, {
-                backgroundColor: colors.cardBackground,
-                borderColor: colors.border,
-                color: colors.text,
-                fontSize: 16 * fontMultiplier
-              }]}
-              placeholder="What should I do? How to prevent this? etc."
-              placeholderTextColor={colors.textSecondary}
-              value={userQuestion}
-              onChangeText={setUserQuestion}
-              multiline
-              numberOfLines={2}
-              textAlignVertical="top"
-              editable={!isAnalyzing}
-            />
+            <Text style={[styles.offlineInfoText, { color: colors.textSecondary, fontSize: 12 * fontMultiplier }]}>
+              Disease detection only. Connect to internet for AI farming advice and personalized recommendations.
+            </Text>
           </View>
         )}
 
@@ -272,11 +325,13 @@ export default function ScanScreen() {
             <View style={styles.analyzingContainer}>
               <ActivityIndicator size="small" color="white" style={{ marginRight: 8 }} />
               <Text style={[styles.analyzeButtonText, { fontSize: 16 * fontMultiplier }]}>
-                {enableAiAdvice ? 'Analyzing & Generating Advice...' : 'Analyzing...'}
+                {offlineMode ? 'Analyzing...' : (enableAiAdvice ? 'Analyzing & Generating Advice...' : 'Analyzing...')}
               </Text>
             </View>
           ) : (
-            <Text style={[styles.analyzeButtonText, { fontSize: 16 * fontMultiplier }]}>Analyze Disease</Text>
+            <Text style={[styles.analyzeButtonText, { fontSize: 16 * fontMultiplier }]}>
+              {offlineMode ? 'Analyze Disease' : 'Analyze Disease'}
+            </Text>
           )}
         </TouchableOpacity>
       </ScrollView>
@@ -298,6 +353,19 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontWeight: '600',
     marginLeft: 12,
+    flex: 1,
+  },
+  statusIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  statusText: {
+    color: 'white',
+    fontWeight: '600',
+    marginLeft: 4,
   },
   content: {
     flex: 1,
@@ -432,5 +500,23 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  offlineModeInfo: {
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 24,
+    borderWidth: 1,
+  },
+  offlineInfoHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  offlineInfoTitle: {
+    fontWeight: '600',
+    marginLeft: 8,
+  },
+  offlineInfoText: {
+    lineHeight: 18,
   },
 });

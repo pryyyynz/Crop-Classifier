@@ -1,37 +1,12 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
-import { Leaf } from 'lucide-react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
+import { Leaf, Trash2, AlertCircle } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { useSettings } from '@/contexts/SettingsContext';
 import { getFontSizeMultiplier, getColors } from '@/utils/theme';
-
-const historyData = [
-  {
-    id: 1,
-    disease: 'Bacterial Blight',
-    date: 'Apr 19, 2024',
-    confidence: '96.4%',
-    image: 'https://images.pexels.com/photos/1268101/pexels-photo-1268101.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
-    description: 'Bacterial blight is a common plant disease caused by various bacterial pathogens. It typically appears as water-soaked lesions on leaves that eventually turn brown or black. The disease can spread rapidly in warm, humid conditions and may cause significant damage to crops if left untreated.\n\nEarly detection and proper management are crucial for preventing the spread of this disease. Treatment options include copper-based fungicides, improved air circulation, and removal of infected plant material.',
-  },
-  {
-    id: 2,
-    disease: 'Powdery Mildew',
-    date: 'Apr 01, 2024',
-    confidence: '89.2%',
-    image: 'https://images.pexels.com/photos/1268101/pexels-photo-1268101.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
-    description: 'Powdery mildew is a fungal disease that appears as white or grayish powdery patches on plant surfaces. It thrives in warm, dry climates with high humidity and can affect a wide range of plants. The fungus reduces photosynthesis and can weaken the plant over time.\n\nPrevention includes proper spacing for air circulation, avoiding overhead watering, and applying fungicides when necessary. Remove affected plant parts to prevent spread.',
-  },
-  {
-    id: 3,
-    disease: 'Late Blight',
-    date: 'Apr 04, 2024',
-    confidence: '92.8%',
-    image: 'https://images.pexels.com/photos/1268101/pexels-photo-1268101.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1',
-    description: 'Late blight is a devastating plant disease caused by Phytophthora infestans. It causes dark, water-soaked lesions on leaves and stems, often with white fuzzy growth on the undersides of leaves. The disease can quickly destroy entire crops in favorable conditions.\n\nManagement includes using resistant varieties, proper crop rotation, avoiding overhead irrigation, and applying preventive fungicides during high-risk periods.',
-  },
-];
+import { historyService, HistoryItem } from '@/utils/historyService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function HistoryScreen() {
   const { darkMode, fontSize } = useSettings();
@@ -39,18 +14,77 @@ export default function HistoryScreen() {
   const fontMultiplier = getFontSizeMultiplier(fontSize);
   const colors = getColors(darkMode);
 
-  const handleHistoryItemPress = (item: typeof historyData[0]) => {
-    router.push({
-      pathname: '/analysis-result',
-      params: {
-        disease: item.disease,
-        confidence: item.confidence,
-        image: item.image,
-        description: item.description,
-        date: item.date,
-      },
-    });
+  const [historyData, setHistoryData] = useState<HistoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const loadHistory = async () => {
+    try {
+      const history = await historyService.getHistory();
+      setHistoryData(history);
+    } catch (error) {
+      console.error('Error loading history:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await loadHistory();
+    setRefreshing(false);
+  }, []);
+
+  // Reload history when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadHistory();
+    }, [])
+  );
+
+  useEffect(() => {
+    loadHistory();
+  }, []);
+
+  const handleHistoryItemPress = async (item: HistoryItem) => {
+    try {
+      // Store the selected result and image for the analysis result screen
+      await AsyncStorage.setItem('classificationResult', JSON.stringify(item.result));
+      await AsyncStorage.setItem('analysisImage', item.imageUri);
+
+      // Navigate to result page
+      router.push('/analysis-result');
+    } catch (error) {
+      console.error('Error opening history item:', error);
+    }
+  };
+
+  const formatDiseaseName = (disease: string) => {
+    return disease.split('_').map(word =>
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+  };
+
+  const getHealthStatusColor = (isHealthy: boolean) => {
+    return isHealthy ? '#22c55e' : '#ef4444';
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+        <View style={[styles.header, { backgroundColor: colors.headerBackground, borderBottomColor: colors.border }]}>
+          <Leaf size={24} color="#22c55e" />
+          <Text style={[styles.headerTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>History</Text>
+        </View>
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#22c55e" />
+          <Text style={[styles.loadingText, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
+            Loading history...
+          </Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
@@ -59,22 +93,72 @@ export default function HistoryScreen() {
         <Text style={[styles.headerTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>History</Text>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {historyData.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            style={[styles.historyItem, { backgroundColor: colors.cardBackground }]}
-            onPress={() => handleHistoryItemPress(item)}
-            activeOpacity={0.7}
-          >
-            <Image source={{ uri: item.image }} style={styles.historyImage} />
-            <View style={styles.historyTextContainer}>
-              <Text style={[styles.historyDisease, { color: colors.text, fontSize: 18 * fontMultiplier }]}>{item.disease}</Text>
-              <Text style={[styles.historyDate, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>{item.date}</Text>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+      {historyData.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <AlertCircle size={48} color={colors.textSecondary} />
+          <Text style={[styles.emptyTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>
+            No Analysis History
+          </Text>
+          <Text style={[styles.emptyText, { color: colors.textSecondary, fontSize: 16 * fontMultiplier }]}>
+            Start analyzing crop diseases to see your history here.
+          </Text>
+        </View>
+      ) : (
+        <ScrollView
+          style={styles.content}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={['#22c55e']}
+              tintColor="#22c55e"
+            />
+          }
+        >
+          {historyData.map((item) => (
+            <TouchableOpacity
+              key={item.id}
+              style={[styles.historyItem, { backgroundColor: colors.cardBackground }]}
+              onPress={() => handleHistoryItemPress(item)}
+              activeOpacity={0.7}
+            >
+              <View style={styles.historyImageContainer}>
+                <Image source={{ uri: item.imageUri }} style={styles.historyImage} />
+                {/* Health status indicator */}
+                <View
+                  style={[
+                    styles.healthIndicator,
+                    { backgroundColor: getHealthStatusColor(item.result.is_healthy) }
+                  ]}
+                />
+              </View>
+
+              <View style={styles.historyTextContainer}>
+                <Text style={[styles.historyDisease, { color: colors.text, fontSize: 18 * fontMultiplier }]}>
+                  {formatDiseaseName(item.result.predicted_disease)}
+                </Text>
+
+                <Text style={[styles.historyCrop, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
+                  {item.result.crop_type.charAt(0).toUpperCase() + item.result.crop_type.slice(1)} • {item.result.confidence}% confidence
+                </Text>
+
+                <Text style={[styles.historyDate, { color: colors.textSecondary, fontSize: 12 * fontMultiplier }]}>
+                  {item.date}
+                </Text>
+              </View>
+
+              <View style={styles.historyActions}>
+                <View style={[styles.statusBadge, { backgroundColor: getHealthStatusColor(item.result.is_healthy) }]}>
+                  <Text style={styles.statusText}>
+                    {item.result.is_healthy ? 'Healthy' : 'Disease'}
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )}
     </SafeAreaView>
   );
 }
@@ -93,6 +177,30 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontWeight: '600',
     marginLeft: 12,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingText: {
+    marginTop: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+  },
+  emptyTitle: {
+    fontWeight: '700',
+    marginTop: 16,
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  emptyText: {
+    textAlign: 'center',
+    lineHeight: 24,
   },
   content: {
     flex: 1,
@@ -114,11 +222,24 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
+  historyImageContainer: {
+    position: 'relative',
+    marginRight: 16,
+  },
   historyImage: {
     width: 60,
     height: 60,
     borderRadius: 8,
-    marginRight: 16,
+  },
+  healthIndicator: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    borderWidth: 2,
+    borderColor: 'white',
   },
   historyTextContainer: {
     flex: 1,
@@ -127,6 +248,23 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 4,
   },
+  historyCrop: {
+    marginBottom: 4,
+  },
   historyDate: {
+    fontStyle: 'italic',
+  },
+  historyActions: {
+    alignItems: 'flex-end',
+  },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  statusText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });

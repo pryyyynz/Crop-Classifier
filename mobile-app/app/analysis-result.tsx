@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Leaf, ArrowLeft, Brain, AlertTriangle, CheckCircle, MessageCircle, Eye, Clock } from 'lucide-react-native';
+import { Leaf, ArrowLeft, Brain, AlertTriangle, CheckCircle, MessageCircle, Eye, Clock, WifiOff, Wifi } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSettings } from '@/contexts/SettingsContext';
 import { getFontSizeMultiplier, getColors } from '@/utils/theme';
@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FormattedText } from '@/components/FormattedText';
 
 export default function AnalysisResultScreen() {
-  const { darkMode, fontSize } = useSettings();
+  const { darkMode, fontSize, offlineMode, isOnline } = useSettings();
   const [result, setResult] = useState<ClassificationResult | null>(null);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,9 +42,10 @@ export default function AnalysisResultScreen() {
   };
 
   const formatDiseaseName = (name: string) => {
-    return name.split('_').map(word =>
-      word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
+    return name
+      .split(/[_\s]+/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   };
 
   const getHealthStatusColor = () => {
@@ -67,8 +68,26 @@ export default function AnalysisResultScreen() {
     router.push('/(tabs)');
   };
 
+  const getStatusIndicator = () => {
+    if (result?.offline_mode) {
+      return (
+        <View style={[styles.statusIndicator, { backgroundColor: '#f59e0b' }]}>
+          <WifiOff size={16} color="white" />
+          <Text style={[styles.statusText, { fontSize: 12 * fontMultiplier }]}>Offline Analysis</Text>
+        </View>
+      );
+    }
+
+    return (
+      <View style={[styles.statusIndicator, { backgroundColor: '#22c55e' }]}>
+        <Wifi size={16} color="white" />
+        <Text style={[styles.statusText, { fontSize: 12 * fontMultiplier }]}>Online Analysis</Text>
+      </View>
+    );
+  };
+
   // Check if AI advice was requested but not yet available
-  const aiAdviceRequested = result?.user_question || result?.notes;
+  const aiAdviceRequested = result?.user_question || result?.ai_advice;
   const shouldShowAiLoading = aiAdviceRequested && !result?.ai_advice && !result?.ai_advice_error;
 
   if (loading) {
@@ -110,6 +129,7 @@ export default function AnalysisResultScreen() {
         </TouchableOpacity>
         <Leaf size={24} color="#22c55e" />
         <Text style={[styles.headerTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>Analysis Result</Text>
+        {getStatusIndicator()}
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -140,52 +160,35 @@ export default function AnalysisResultScreen() {
           </Text>
 
           <Text style={[styles.healthStatus, { color: getHealthStatusColor(), fontSize: 16 * fontMultiplier }]}>
-            Status: {result.is_healthy ? 'Healthy Plant' : 'Disease Detected'}
+            Status: {result.is_healthy ? 'Healthy' : 'Disease Detected'}
           </Text>
 
-          <View style={styles.cropTypeContainer}>
-            <Text style={[styles.cropTypeLabel, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
-              Crop Type:
-            </Text>
-            <View style={styles.cropTypeBadge}>
-              <Text style={[styles.cropTypeText, { fontSize: 14 * fontMultiplier }]}>
-                {result.crop_type.charAt(0).toUpperCase() + result.crop_type.slice(1)}
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Top Predictions */}
-        {result.top_predictions && result.top_predictions.length > 1 && (
-          <View style={[styles.card, { backgroundColor: colors.cardBackground }]}>
-            <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 18 * fontMultiplier }]}>
-              Top Predictions
-            </Text>
-            {result.top_predictions.slice(0, 3).map((prediction, index) => (
-              <View key={index} style={[styles.predictionItem, { backgroundColor: colors.background }]}>
-                <Text style={[styles.predictionName, { color: colors.text, fontSize: 14 * fontMultiplier }]}>
-                  {formatDiseaseName(prediction.disease)}
-                </Text>
-                <Text style={[styles.predictionConfidence, { fontSize: 14 * fontMultiplier }]}>
-                  {prediction.confidence}%
-                </Text>
-              </View>
-            ))}
-          </View>
-        )}
-
-        {/* Basic Description */}
-        <View style={[styles.card, { backgroundColor: colors.cardBackground }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 18 * fontMultiplier }]}>
-            Basic Description
-          </Text>
           <Text style={[styles.resultDescription, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
             {result.description}
           </Text>
+
+          {/* Show Top Predictions */}
+          {result.top_predictions && result.top_predictions.length > 1 && (
+            <View style={styles.predictionsContainer}>
+              <Text style={[styles.predictionsTitle, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
+                Other Possibilities:
+              </Text>
+              {result.top_predictions.slice(1, 3).map((prediction, index) => (
+                <View key={index} style={styles.predictionItem}>
+                  <Text style={[styles.predictionName, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
+                    {formatDiseaseName(prediction.disease)}
+                  </Text>
+                  <Text style={[styles.predictionConfidence, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
+                    {prediction.confidence}%
+                  </Text>
+                </View>
+              ))}
+            </View>
+          )}
         </View>
 
-        {/* User Question Display */}
-        {result.user_question && (
+        {/* User Question Display - Only for online mode */}
+        {result.user_question && !result.offline_mode && (
           <View style={[
             styles.card,
             styles.questionCard,
@@ -206,8 +209,29 @@ export default function AnalysisResultScreen() {
           </View>
         )}
 
-        {/* AI Advice Section */}
-        {result.ai_advice ? (
+        {/* Disease Information Section - For offline mode */}
+        {result.offline_mode && (
+          <View style={[styles.card, { backgroundColor: colors.cardBackground }]}>
+            <View style={styles.diseaseInfoHeader}>
+              <Text style={[styles.diseaseInfoTitle, { color: colors.text, fontSize: 18 * fontMultiplier }]}>
+                Disease Information
+              </Text>
+              <View style={[styles.offlineIndicator, { backgroundColor: '#f59e0b' }]}>
+                <WifiOff size={12} color="white" />
+                <Text style={[styles.offlineIndicatorText, { fontSize: 10 * fontMultiplier }]}>
+                  Offline
+                </Text>
+              </View>
+            </View>
+
+            <Text style={[styles.offlineDescription, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
+              Basic disease information available offline. Connect to internet for comprehensive AI analysis.
+            </Text>
+          </View>
+        )}
+
+        {/* AI Advice Section - Only for online mode with advice */}
+        {!result.offline_mode && result.ai_advice && (
           <>
             {/* AI Header */}
             <View style={[
@@ -220,7 +244,7 @@ export default function AnalysisResultScreen() {
             ]}>
               <View style={styles.aiTitleContainer}>
                 <Brain size={20} color="#8b5cf6" />
-                <Text style={[styles.aiTitle, { fontSize: 18 * fontMultiplier }]}>
+                <Text style={[styles.aiTitle, { fontSize: 18 * fontMultiplier, color: '#8b5cf6' }]}>
                   AI Agricultural Advisor
                 </Text>
               </View>
@@ -320,77 +344,10 @@ export default function AnalysisResultScreen() {
               </View>
             )}
           </>
-        ) : shouldShowAiLoading ? (
-          <>
-            {/* AI Loading State */}
-            <View style={[
-              styles.card,
-              styles.loadingCard,
-              {
-                backgroundColor: darkMode ? '#581c87' : '#faf5ff',
-                borderColor: '#8b5cf6'
-              }
-            ]}>
-              <View style={styles.loadingHeader}>
-                <Brain size={20} color="#8b5cf6" />
-                <Text style={[styles.aiTitle, { fontSize: 18 * fontMultiplier }]}>
-                  AI Agricultural Advisor
-                </Text>
-              </View>
-              <Text style={[styles.aiSubtitle, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
-                Generating personalized farming advice...
-              </Text>
-            </View>
+        )}
 
-            {/* Question Answer Loading Placeholder */}
-            {result.user_question && (
-              <View style={[
-                styles.card,
-                styles.answerCard,
-                {
-                  backgroundColor: darkMode ? '#1e3a8a' : '#eff6ff',
-                  borderColor: '#3b82f6'
-                }
-              ]}>
-                <View style={styles.answerHeader}>
-                  <MessageCircle size={16} color="#3b82f6" />
-                  <Text style={[styles.answerTitle, { fontSize: 16 * fontMultiplier }]}>
-                    Answer to Your Question
-                  </Text>
-                </View>
-                <View style={styles.loadingIndicator}>
-                  <ActivityIndicator size="small" color="#3b82f6" />
-                  <Text style={[styles.loadingIndicatorText, { fontSize: 14 * fontMultiplier }]}>
-                    Preparing your personalized answer...
-                  </Text>
-                </View>
-              </View>
-            )}
-
-            {/* AI Loading Placeholder */}
-            <View style={[
-              styles.card,
-              styles.aiLoadingCard,
-              {
-                backgroundColor: darkMode ? '#581c87' : '#faf5ff',
-                borderColor: '#8b5cf6'
-              }
-            ]}>
-              <View style={styles.aiLoadingContent}>
-                <View style={styles.aiLoadingIcons}>
-                  <ActivityIndicator size="small" color="#8b5cf6" />
-                  <Brain size={20} color="#8b5cf6" />
-                </View>
-                <Text style={[styles.aiLoadingTitle, { fontSize: 16 * fontMultiplier }]}>
-                  Generating AI Advice...
-                </Text>
-                <Text style={[styles.aiLoadingDesc, { color: colors.textSecondary, fontSize: 12 * fontMultiplier }]}>
-                  Our AI agricultural expert is analyzing your crop and preparing personalized recommendations.
-                </Text>
-              </View>
-            </View>
-          </>
-        ) : aiAdviceRequested ? (
+        {/* AI Advice Error - Only for online mode */}
+        {!result.offline_mode && result.ai_advice_error && (
           <View style={[styles.card, { backgroundColor: colors.cardBackground }]}>
             <View style={styles.errorContainer}>
               <Brain size={48} color={colors.textSecondary} />
@@ -399,18 +356,6 @@ export default function AnalysisResultScreen() {
               </Text>
               <Text style={[styles.errorText, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
                 {result.ai_advice_error || "AI advice generation failed. Please try again."}
-              </Text>
-            </View>
-          </View>
-        ) : (
-          <View style={[styles.card, { backgroundColor: colors.cardBackground }]}>
-            <View style={styles.errorContainer}>
-              <Brain size={48} color={colors.textSecondary} />
-              <Text style={[styles.errorTitle, { color: colors.text, fontSize: 18 * fontMultiplier }]}>
-                AI Advice Not Requested
-              </Text>
-              <Text style={[styles.errorText, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
-                Enable AI advice on the analysis page to get personalized farming recommendations.
               </Text>
             </View>
           </View>
@@ -444,6 +389,19 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontWeight: '600',
     marginLeft: 12,
+    flex: 1,
+  },
+  statusIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  statusText: {
+    color: 'white',
+    fontWeight: '600',
+    marginLeft: 4,
   },
   content: {
     flex: 1,
@@ -526,51 +484,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'center',
   },
-  cropTypeContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 8,
-  },
-  cropTypeLabel: {
-    fontWeight: '500',
-    marginRight: 8,
-  },
-  cropTypeBadge: {
-    backgroundColor: '#e0f2fe',
-    borderRadius: 12,
-    paddingVertical: 4,
-    paddingHorizontal: 12,
-  },
-  cropTypeText: {
-    fontWeight: '600',
-    color: '#0369a1',
-  },
-  sectionTitle: {
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  predictionItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 8,
-  },
-  predictionName: {
-    flex: 1,
-  },
-  predictionConfidence: {
-    fontWeight: '600',
-    color: '#22c55e',
-  },
   resultDescription: {
     lineHeight: 22,
   },
   questionCard: {
-    backgroundColor: '#eff6ff',
-    borderColor: '#3b82f6',
     borderWidth: 1,
   },
   questionHeader: {
@@ -584,11 +501,9 @@ const styles = StyleSheet.create({
     color: '#3b82f6',
   },
   questionText: {
-    lineHeight: 22,
+    lineHeight: 20,
   },
   aiHeader: {
-    backgroundColor: '#faf5ff',
-    borderColor: '#8b5cf6',
     borderWidth: 1,
   },
   aiTitleContainer: {
@@ -599,7 +514,6 @@ const styles = StyleSheet.create({
   aiTitle: {
     fontWeight: '600',
     marginLeft: 8,
-    color: '#8b5cf6',
   },
   aiSubtitle: {
     marginTop: 4,
@@ -634,52 +548,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 8,
   },
-  loadingCard: {
-    backgroundColor: '#faf5ff',
-    borderColor: '#8b5cf6',
-    borderWidth: 1,
-  },
-  loadingHeader: {
+  offlineNotice: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
+    alignItems: 'flex-start',
   },
-  loadingIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-  },
-  loadingIndicatorText: {
+  offlineNoticeText: {
     marginLeft: 8,
-    color: '#3b82f6',
-  },
-  aiLoadingCard: {
-    backgroundColor: '#faf5ff',
-    borderColor: '#8b5cf6',
-    borderWidth: 1,
-    alignItems: 'center',
-  },
-  aiLoadingContent: {
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  aiLoadingIcons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    gap: 8,
-  },
-  aiLoadingTitle: {
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#8b5cf6',
-    textAlign: 'center',
-  },
-  aiLoadingDesc: {
-    textAlign: 'center',
-    lineHeight: 18,
-    paddingHorizontal: 16,
+    lineHeight: 20,
+    flex: 1,
   },
   buttonContainer: {
     marginTop: 16,
@@ -696,11 +572,51 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
   },
-  secondaryButton: {
-    backgroundColor: 'transparent',
-    borderWidth: 2,
+  predictionsContainer: {
+    marginTop: 16,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#e5e7eb',
   },
-  secondaryButtonText: {
-    color: '#22c55e',
+  predictionsTitle: {
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  predictionItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 4,
+  },
+  predictionName: {
+    flex: 1,
+  },
+  predictionConfidence: {
+    fontWeight: '500',
+  },
+  diseaseInfoHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  diseaseInfoTitle: {
+    fontWeight: '600',
+  },
+  offlineIndicator: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  offlineIndicatorText: {
+    color: 'white',
+    fontWeight: '600',
+    marginLeft: 4,
+  },
+  offlineDescription: {
+    lineHeight: 18,
+    fontStyle: 'italic',
   },
 });
