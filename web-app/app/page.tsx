@@ -88,7 +88,7 @@ export default function HomePage() {
         <div className="flex items-center justify-between max-w-4xl mx-auto">
           <div className="flex items-center gap-2">
             <Leaf className="w-6 h-6 text-green-600" />
-            <span className="text-xl font-medium text-gray-900 dark:text-white">Detect Crop Disease</span>
+            <span className="text-xl font-medium text-gray-900 dark:text-white">GreenCheck</span>
           </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
