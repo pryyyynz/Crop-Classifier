@@ -24,73 +24,22 @@ export default function AboutScreen() {
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={[styles.section, { backgroundColor: colors.cardBackground }]}>
-          <Text style={[styles.appName, { color: colors.text, fontSize: 28 * fontMultiplier }]}>
-            Detect Crop Disease
-          </Text>
-          <Text style={[styles.version, { color: colors.textSecondary, fontSize: 16 * fontMultiplier }]}>
-            Version 1.0.0
-          </Text>
+          <Text style={[styles.appName, { color: colors.text, fontSize: 28 * fontMultiplier }]}>GreenCheck</Text>
+          <Text style={[styles.version, { color: colors.textSecondary, fontSize: 16 * fontMultiplier }]}>Version 1.0.0</Text>
         </View>
 
         <View style={[styles.section, { backgroundColor: colors.cardBackground }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>
-            About This App
-          </Text>
-          <Text style={[styles.description, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            Detect Crop Disease is an AI-powered mobile application designed to help farmers and agricultural professionals identify plant diseases quickly and accurately. Using advanced machine learning algorithms, the app can analyze images of crops and provide instant disease detection with confidence ratings.
-          </Text>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>About This App</Text>
+          <Text style={[styles.description, { color: colors.text, fontSize: 16 * fontMultiplier }]}>GreenCheck is an AI-powered mobile application designed to help farmers and agricultural professionals identify plant diseases quickly and accurately. Using advanced machine learning algorithms, the app can analyze images of crops and provide instant disease detection with confidence ratings.</Text>
         </View>
 
         <View style={[styles.section, { backgroundColor: colors.cardBackground }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>
-            Features
-          </Text>
-          <Text style={[styles.featureItem, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            • AI-powered disease detection
-          </Text>
-          <Text style={[styles.featureItem, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            • Support for multiple crop types
-          </Text>
-          <Text style={[styles.featureItem, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            • Detailed disease descriptions and treatment recommendations
-          </Text>
-          <Text style={[styles.featureItem, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            • History tracking of previous scans
-          </Text>
-          <Text style={[styles.featureItem, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            • Dashboard with analytics and statistics
-          </Text>
-          <Text style={[styles.featureItem, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            • Offline mode support
-          </Text>
+          <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>Contact & Support</Text>
+          <Text style={[styles.description, { color: colors.text, fontSize: 16 * fontMultiplier }]}>For technical support, feature requests, or general inquiries, please contact our support team at dugboryeleprince@gmail.com</Text>
         </View>
 
         <View style={[styles.section, { backgroundColor: colors.cardBackground }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>
-            How It Works
-          </Text>
-          <Text style={[styles.description, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            1. Take a photo or upload an image of your crop{'\n'}
-            2. Select the crop type from the dropdown menu{'\n'}
-            3. Add any additional notes or observations{'\n'}
-            4. Tap "Analyze" to get instant disease detection results{'\n'}
-            5. View detailed information about detected diseases and recommended treatments
-          </Text>
-        </View>
-
-        <View style={[styles.section, { backgroundColor: colors.cardBackground }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text, fontSize: 20 * fontMultiplier }]}>
-            Contact & Support
-          </Text>
-          <Text style={[styles.description, { color: colors.text, fontSize: 16 * fontMultiplier }]}>
-            For technical support, feature requests, or general inquiries, please contact our support team at support@cropdetect.com
-          </Text>
-        </View>
-
-        <View style={[styles.section, { backgroundColor: colors.cardBackground }]}>
-          <Text style={[styles.copyright, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>
-            © 2024 Detect Crop Disease. All rights reserved.
-          </Text>
+          <Text style={[styles.copyright, { color: colors.textSecondary, fontSize: 14 * fontMultiplier }]}>© 2025 GreenCheck. All rights reserved.</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
