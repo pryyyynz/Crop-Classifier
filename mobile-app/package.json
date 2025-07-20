@@ -1,6 +1,6 @@
 {
-  "name": "expo-app",
-  "description": "Mobile application for Crop Classifier",
+  "name": "greencheck",
+  "description": "GreenCheck - Mobile application for Crop Disease Detection",
   "main": "expo-router/entry",
   "version": "1.0.0",
   "private": true,
