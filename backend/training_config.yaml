@@ -1,0 +1,216 @@
+# Crop Disease Classification Training Configuration
+# This file contains all necessary settings to replicate the training process
+
+# Project Configuration
+project:
+  name: "crop-classifier"
+  description: "Deep learning model for crop disease classification"
+  wandb_project: "crop-classifier"
+
+# Model Configuration
+model:
+  architecture: "efficientnet_b1"
+  pretrained: true
+  input_size: 240  # 240x240 pixels
+  freeze_backbone: true  # Freeze all layers except last 2 blocks and classifier
+  freeze_exceptions: ["blocks.6", "blocks.5", "classifier"]
+  
+  # Custom classifier architecture
+  classifier:
+    dropout_1: 0.3
+    hidden_size: 512
+    activation: "ReLU"
+    dropout_2: 0.2
+
+# Training Configuration
+training:
+  batch_size: 48
+  num_epochs: 50
+  learning_rate: 0.0001  # 1e-4
+  weight_decay: 0.00001  # 1e-5
+  optimizer: "AdamW"
+  
+  # Learning rate scheduler
+  scheduler:
+    type: "ReduceLROnPlateau"
+    mode: "min"
+    factor: 0.5
+    patience: 5
+  
+  # Early stopping
+  early_stopping:
+    patience: 10
+    monitor: "val_accuracy"
+    mode: "max"
+  
+  # Mixed precision training
+  mixed_precision: true
+  
+  # Loss function
+  criterion: "CrossEntropyLoss"
+
+# Data Configuration
+data:
+  # Data paths (relative to backend directory)
+  data_dir: "data"
+  models_dir: "training/models"
+  
+  # Data structure
+  data_structure: "Combined/Augmented/{crop}/{split}"
+  splits:
+    train: "train_set"
+    validation: "test_set"  # Note: using test_set as validation in current setup
+  
+  # Data loading
+  num_workers: 4
+  pin_memory: true
+  shuffle_train: true
+  shuffle_val: false
+
+# Image Preprocessing
+preprocessing:
+  # Transforms for training and validation (same in current setup)
+  resize: [240, 240]
+  normalize:
+    mean: [0.485, 0.456, 0.406]  # ImageNet standards
+    std: [0.229, 0.224, 0.225]   # ImageNet standards
+  
+# Crop-specific Configuration
+crops:
+  cashew:
+    num_classes: 5
+    classes: ["anthracnose", "gumosis", "healthy", "leaf_miner", "red_rust"]
+    batch_size: 48  # Can override global batch_size per crop
+    
+  cassava:
+    num_classes: 5
+    classes: ["bacterial_blight", "brown_spot", "green_mite", "healthy", "mosaic"]
+    batch_size: 32  # Different batch size for cassava
+    num_epochs: 20  # Different epochs for cassava
+    patience: 5     # Different patience for cassava
+    
+  maize:
+    num_classes: 7
+    classes: ["fall_armyworm", "grasshoper", "healthy", "leaf_beetle", "leaf_blight", "leaf_spot", "streak_virus"]
+    batch_size: 48
+    
+  tomato:
+    num_classes: 5
+    classes: ["healthy", "leaf_blight", "leaf_curl", "septoria_leaf_spot", "verticulium_wilt"]
+    batch_size: 48
+
+# Output Configuration
+output:
+  save_formats: ["pytorch", "onnx"]  # Save both .pth and .onnx formats
+  
+  # Model naming convention
+  model_naming: "best_{crop_name}_model"
+  
+  # Visualization outputs
+  generate_plots: true
+  plots:
+    - confusion_matrix
+    - classification_report
+  
+  # ONNX Export Settings
+  onnx:
+    opset_version: 11
+    dynamic_axes:
+      input: {0: "batch_size"}
+      output: {0: "batch_size"}
+    input_names: ["input"]
+    output_names: ["output"]
+
+# Environment Requirements
+environment:
+  python_version: ">=3.8"
+  cuda_required: true  # GPU training recommended
+  
+  # Core dependencies
+  dependencies:
+    - "torch>=1.9.0"
+    - "torchvision>=0.10.0"
+    - "timm>=0.6.0"
+    - "wandb>=0.12.0"
+    - "scikit-learn>=1.0.0"
+    - "matplotlib>=3.5.0"
+    - "seaborn>=0.11.0"
+    - "Pillow>=8.0.0"
+    - "numpy>=1.21.0"
+    - "pathlib"
+    - "onnx>=1.10.0"
+
+# Hardware Configuration 
+hardware:
+  hardware_requirements:
+    gpu: "NVIDIA RTX 6000 Ada Generation"
+    gpu_memory: "48GB"
+    ram: "64GB"
+    cpu_cores: "8"
+    storage: "500GB NVMe"
+  
+  # Settings from actual training run
+  training_environment:
+    os: "Linux-5.15.0-113-generic-x86_64-with-glibc2.35"
+    python: "CPython 3.10.18"
+    cuda_version: "12.9"
+    gpu_count: 1
+
+# Logging and Monitoring
+logging:
+  wandb:
+    enabled: true
+    log_frequency: 1  # Log every epoch
+    metrics:
+      - "train_loss"
+      - "train_accuracy"
+      - "val_loss" 
+      - "val_accuracy"
+      - "learning_rate"
+      - "epoch"
+  
+  console:
+    print_frequency: 100  # Print every 100 batches during training
+    
+  checkpointing:
+    save_best_only: true
+    monitor: "val_accuracy"
+    mode: "max"
+
+# Reproducibility
+reproducibility:
+  # Set these for reproducible results
+  random_seed: 42
+  torch_deterministic: true
+  torch_benchmark: false  # Set to true for performance if determinism not needed
+
+# Advanced Configuration
+advanced:
+  # Gradient scaling for mixed precision
+  gradient_scaling: true
+  
+  # Model compilation (PyTorch 2.0+)
+  compile_model: false  # Set to true if using PyTorch 2.0+
+  
+  # DataLoader optimizations
+  dataloader_optimizations:
+    persistent_workers: true
+    prefetch_factor: 2
+
+# Usage Instructions
+usage:
+  setup_commands:
+    - "pip install -r requirements.txt"
+    - "wandb login"  # Required for experiment tracking
+  
+  training_commands:
+    - "cd backend/training"
+    - "python train_cashew.py"
+    - "python train_cassava.py" 
+    - "python train_maize.py"
+    - "python train_tomato.py"
+
+# Version Information
+version: "1.0"
+last_updated: "2025-07-20"
+compatible_with: "Crop-Classifier v1.0"
